@@ -7,6 +7,7 @@ import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
 import { routes, display, person, about, blog, work, gallery } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
+import { trackLinkClick } from "@/utils/analytics";
 import styles from "./Header.module.scss";
 
 type TimeDisplayProps = {
@@ -44,6 +45,10 @@ export default TimeDisplay;
 
 export const Header = () => {
   const pathname = usePathname() ?? "";
+
+  const handleNavClick = (href: string, label: string) => {
+    trackLinkClick(href, label, "header");
+  };
 
   return (
     <>
@@ -87,7 +92,12 @@ export const Header = () => {
           >
             <Row gap="4" vertical="center" textVariant="body-default-s" suppressHydrationWarning>
               {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
+                <ToggleButton 
+                  prefixIcon="home" 
+                  href="/" 
+                  selected={pathname === "/"}
+                  onClick={() => handleNavClick("/", "Home")}
+                />
               )}
               <Line background="neutral-alpha-medium" vert maxHeight="24" />
               {routes["/about"] && (
@@ -98,6 +108,7 @@ export const Header = () => {
                       href="/about"
                       label={about.label}
                       selected={pathname === "/about"}
+                      onClick={() => handleNavClick("/about", about.label)}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
@@ -105,6 +116,7 @@ export const Header = () => {
                       prefixIcon="person"
                       href="/about"
                       selected={pathname === "/about"}
+                      onClick={() => handleNavClick("/about", about.label)}
                     />
                   </Row>
                 </>
@@ -117,6 +129,7 @@ export const Header = () => {
                       href="/work"
                       label={work.label}
                       selected={pathname.startsWith("/work")}
+                      onClick={() => handleNavClick("/work", work.label)}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
@@ -124,6 +137,7 @@ export const Header = () => {
                       prefixIcon="grid"
                       href="/work"
                       selected={pathname.startsWith("/work")}
+                      onClick={() => handleNavClick("/work", work.label)}
                     />
                   </Row>
                 </>
@@ -136,6 +150,7 @@ export const Header = () => {
                       href="/blog"
                       label={blog.label}
                       selected={pathname.startsWith("/blog")}
+                      onClick={() => handleNavClick("/blog", blog.label)}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
@@ -143,6 +158,7 @@ export const Header = () => {
                       prefixIcon="book"
                       href="/blog"
                       selected={pathname.startsWith("/blog")}
+                      onClick={() => handleNavClick("/blog", blog.label)}
                     />
                   </Row>
                 </>
@@ -155,6 +171,7 @@ export const Header = () => {
                       href="/gallery"
                       label={gallery.label}
                       selected={pathname.startsWith("/gallery")}
+                      onClick={() => handleNavClick("/gallery", gallery.label)}
                     />
                   </Row>
                   <Row hide s={{ hide: false }}>
@@ -162,6 +179,7 @@ export const Header = () => {
                       prefixIcon="gallery"
                       href="/gallery"
                       selected={pathname.startsWith("/gallery")}
+                      onClick={() => handleNavClick("/gallery", gallery.label)}
                     />
                   </Row>
                 </>

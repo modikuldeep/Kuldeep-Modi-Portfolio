@@ -1,9 +1,16 @@
+"use client";
+
 import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
 import { person, social } from "@/resources";
+import { trackSocialClick } from "@/utils/analytics";
 import styles from "./Footer.module.scss";
 
 export const Footer = () => {
   const currentYear = new Date().getFullYear();
+
+  const handleSocialClick = (platform: string) => {
+    trackSocialClick(platform.toLowerCase());
+  };
 
   return (
     <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
@@ -41,6 +48,7 @@ export const Footer = () => {
                   tooltip={item.name}
                   size="s"
                   variant="ghost"
+                  onClick={() => handleSocialClick(item.name)}
                 />
               ),
           )}

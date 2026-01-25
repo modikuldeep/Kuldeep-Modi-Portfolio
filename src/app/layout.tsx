@@ -4,17 +4,17 @@ import "@/resources/custom.css";
 
 import classNames from "classnames";
 
+import { Footer, Header, LinkTracker, Providers, RouteGuard } from "@/components";
+import { baseURL, dataStyle, effects, fonts, home, style } from "@/resources";
 import {
   Background,
   Column,
   Flex,
   Meta,
-  opacity,
   RevealFx,
   SpacingToken,
+  opacity,
 } from "@once-ui-system/core";
-import { Footer, Header, RouteGuard, Providers } from "@/components";
-import { baseURL, effects, fonts, style, dataStyle, home } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -45,6 +45,11 @@ export default async function RootLayout({
       )}
     >
       <head>
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
+        />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -104,6 +109,7 @@ export default async function RootLayout({
         />
       </head>
       <Providers>
+        <LinkTracker />
         <Column
           as="body"
           background="page"

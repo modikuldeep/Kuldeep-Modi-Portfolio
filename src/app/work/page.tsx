@@ -12,7 +12,7 @@ export async function generateMetadata() {
   });
 }
 
-export default function Work() {
+export default async function Work() {
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Row, ToggleButton, useTheme } from "@once-ui-system/core";
+import { trackThemeToggle } from "@/utils/analytics";
 
 export const ThemeToggle: React.FC = () => {
   const { theme, setTheme } = useTheme();
@@ -20,10 +21,15 @@ export const ThemeToggle: React.FC = () => {
   const icon = currentTheme === "dark" ? "light" : "dark";
   const nextTheme = currentTheme === "light" ? "dark" : "light";
 
+  const handleThemeToggle = () => {
+    setTheme(nextTheme);
+    trackThemeToggle(nextTheme);
+  };
+
   return (
     <ToggleButton
       prefixIcon={icon}
-      onClick={() => setTheme(nextTheme)}
+      onClick={handleThemeToggle}
       aria-label={`Switch to ${nextTheme} mode`}
     />
   );
