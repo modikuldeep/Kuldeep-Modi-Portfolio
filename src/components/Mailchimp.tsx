@@ -1,8 +1,8 @@
 "use client";
 
 import { mailchimp, newsletter } from "@/resources";
-import { Button, Heading, Input, Text, Background, Column, Row } from "@once-ui-system/core";
-import type { opacity, SpacingToken } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Input, Row, Text } from "@once-ui-system/core";
+import type { SpacingToken, opacity } from "@once-ui-system/core";
 import { useState } from "react";
 
 function debounce<T extends (...args: unknown[]) => void>(func: T, delay: number): T {
@@ -38,7 +38,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
     }
   };
 
-  const debouncedHandleChange = debounce(handleChange, 2000);
+  const debouncedHandleChange = debounce(handleChange as (...args: unknown[]) => void, 2000);
 
   const handleBlur = () => {
     setTouched(true);
