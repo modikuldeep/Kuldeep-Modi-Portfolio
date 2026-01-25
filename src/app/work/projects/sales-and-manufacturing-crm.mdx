@@ -1,0 +1,54 @@
+---
+title: "Sales and Manufacturing CRM"
+publishedAt: "2025-12-15"
+summary: "A comprehensive Sales and Manufacturing CRM system with multi-channel order integration, cross-platform mobile app, and automated workflow management."
+images:
+  - "/images/projects/sales-and-manufacturing-crm/dashboard.png"
+  - "/images/projects/sales-and-manufacturing-crm/modules.png"
+  - "/images/projects/sales-and-manufacturing-crm/mfg.png"
+  - "/images/projects/sales-and-manufacturing-crm/mobile.png"
+team:
+  - name: "Kuldeep Modi"
+    role: "Full Stack Developer"
+    avatar: "/images/Kuldeep.jpg"
+    linkedIn: "https://linkedin.com/in/kuldeep-modi"
+---
+
+## Overview
+
+Developed a complete Sales and Manufacturing CRM system to manage the entire business lifecycle from inquiries to dispatch operations. The system integrates multiple sales channels, automates order processing, and provides a unified platform for managing sales pipeline, products, manufacturing processes, and logistics operations.
+
+## Key Features
+
+- **Complete CRM System**: Comprehensive management of inquiries, sales pipeline, products, manufacturing processes, and dispatch operations in a single platform
+- **Dynamic Product Attribute System**: Flexible product configuration system allowing dynamic attributes and variations without code changes
+- **Role-Based Access Control (RBAC)**: Multi-level hierarchy for departments with granular permissions ensuring secure access to sensitive business data
+- **Multi-Channel Order Integration**: Automated order syncing from Amazon, FirstCry, and Shopify using APIs, eliminating manual data entry and reducing operational errors
+- **Logistics Optimization**: Intelligent courier assignment, delivery workflow automation, and real-time tracking to reduce logistics costs and improve turnaround time
+- **Communication Integration**: WhatsApp API integration for instant notifications and Mailgun for marketing and transactional emails
+- **Cross-Platform Mobile App**: Developed internal operations app using Cordova (Ionic framework), deployable as Web, Android, and iOS from a single codebase
+- **Cloud Infrastructure**: Managed deployments on AWS with EC2 for hosting and S3 for secure file storage and media management
+- **Data Management**: Implemented modules for PDF generation, Excel export for reporting, and Excel import for bulk onboarding of historical data
+
+## Technologies Used
+
+- **Frontend**: React.js, Ionic Framework, Cordova
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB, MySQL
+- **Cloud Services**: AWS (EC2, S3)
+- **APIs**: Amazon Seller API, FirstCry API, Shopify API, WhatsApp Business API
+- **Email Services**: Mailgun
+- **Document Processing**: PDF generation libraries, Excel processing libraries
+- **Mobile**: Cordova (Ionic) for cross-platform deployment
+
+## Challenges and Learnings
+
+One of the major challenges was integrating multiple e-commerce platforms (Amazon, FirstCry, Shopify) with different API structures and rate limits. This required building a robust abstraction layer that normalized data from different sources while handling API rate limits and error scenarios gracefully.
+
+Implementing the multi-level department hierarchy with RBAC required careful design to ensure permissions cascaded correctly while maintaining security. The cross-platform mobile app development with Cordova presented challenges in maintaining consistent UI/UX across Web, Android, and iOS platforms.
+
+Optimizing the logistics workflow involved analyzing historical delivery data to create intelligent courier assignment algorithms that consider factors like distance, capacity, and delivery time windows.
+
+## Outcome
+
+The CRM system successfully automated order processing from multiple channels, reducing manual workload by 75% and operational errors by 90%. The automated courier assignment system reduced logistics costs by 30% and improved delivery turnaround time by 40%. The cross-platform mobile app enabled field operations teams to access critical information on-the-go, improving operational efficiency. The bulk data import feature accelerated the migration of historical data, saving weeks of manual data entry work.

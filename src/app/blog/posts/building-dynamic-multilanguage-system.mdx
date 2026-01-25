@@ -1,0 +1,435 @@
+---
+title: "Building a Dynamic Multilanguage System Without Rebuilds"
+subtitle: "How I implemented runtime language switching using database-driven translations in Nest.js and Next.js"
+summary: "A technical deep dive into creating a multilanguage system that allows content updates without code rebuilds, using TypeORM, MySQL, and dynamic translation loading."
+publishedAt: "2025-01-25"
+image: "/images/blog/blog-2.png"
+tag: "Full Stack Development"
+---
+
+## The Problem
+
+During a recent project, I needed to build a multilanguage system for a talent hiring platform. The challenge wasn't just supporting multiple languages—it was allowing content updates without rebuilding and redeploying the application. Traditional i18n solutions require code changes and rebuilds, but the client needed non-technical team members to update translations in real-time.
+
+## Requirements
+
+- Support multiple languages (English, Spanish, French, etc.)
+- Allow content updates without code deployments
+- Maintain type safety with TypeScript
+- Fast performance with minimal database queries
+- Support for nested translation keys
+- Admin panel for managing translations
+
+## Architecture Overview
+
+The solution involved storing translations in a MySQL database, caching them in memory, and providing a REST API for the frontend. The admin panel uses Redux for state management, while the public-facing Next.js app fetches translations dynamically.
+
+### Database Schema
+
+First, I designed a flexible database schema to store translations:
+
+<CodeBlock
+  codes={[
+    {
+      code: `// Translation Entity
+@Entity('translations')
+export class Translation {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ type: 'varchar', length: 10 })
+  language: string; // 'en', 'es', 'fr', etc.
+
+  @Column({ type: 'varchar', length: 255 })
+  key: string; // 'home.title', 'button.submit', etc.
+
+  @Column({ type: 'text' })
+  value: string; // The actual translated text
+
+  @Column({ type: 'varchar', length: 50, nullable: true })
+  namespace: string; // Optional grouping: 'common', 'auth', 'dashboard'
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @Index(['language', 'key', 'namespace'])
+  uniqueTranslation: string;
+}`,
+      language: "typescript",
+      label: "Translation Entity"
+    }
+  ]}
+/>
+
+### Backend Service Layer
+
+The core service loads all translations into memory on startup and provides methods to retrieve them:
+
+<CodeBlock
+  codes={[
+    {
+      code: `@Injectable()
+export class TranslationService {
+  private translationsCache: Map<string, Map<string, string>> = new Map();
+  private cacheTimestamp: Date;
+
+  constructor(
+    @InjectRepository(Translation)
+    private translationRepository: Repository<Translation>,
+  ) {}
+
+  async onModuleInit() {
+    await this.loadTranslations();
+    // Reload every 5 minutes to pick up changes
+    setInterval(() => this.loadTranslations(), 5 * 60 * 1000);
+  }
+
+  private async loadTranslations() {
+    const allTranslations = await this.translationRepository.find();
+    const newCache = new Map<string, Map<string, string>>();
+
+    for (const translation of allTranslations) {
+      const langKey = translation.language;
+      if (!newCache.has(langKey)) {
+        newCache.set(langKey, new Map());
+      }
+
+      const key = translation.namespace 
+        ? \`\${translation.namespace}.\${translation.key}\`
+        : translation.key;
+      
+      newCache.get(langKey)!.set(key, translation.value);
+    }
+
+    this.translationsCache = newCache;
+    this.cacheTimestamp = new Date();
+  }
+
+  getTranslation(language: string, key: string, namespace?: string): string {
+    const langMap = this.translationsCache.get(language);
+    if (!langMap) {
+      return key; // Fallback to key if language not found
+    }
+
+    const fullKey = namespace ? \`\${namespace}.\${key}\` : key;
+    return langMap.get(fullKey) || key;
+  }
+
+  getAllTranslations(language: string): Record<string, string> {
+    const langMap = this.translationsCache.get(language);
+    if (!langMap) {
+      return {};
+    }
+
+    const result: Record<string, string> = {};
+    langMap.forEach((value, key) => {
+      result[key] = value;
+    });
+    return result;
+  }
+}`,
+      language: "typescript",
+      label: "Translation Service"
+    }
+  ]}
+/>
+
+### API Controller
+
+The controller exposes endpoints for fetching translations:
+
+<CodeBlock
+  codes={[
+    {
+      code: `@Controller('api/translations')
+export class TranslationController {
+  constructor(private translationService: TranslationService) {}
+
+  @Get(':language')
+  @ApiOperation({ summary: 'Get all translations for a language' })
+  @ApiResponse({ status: 200, description: 'Translations retrieved successfully' })
+  async getTranslations(
+    @Param('language') language: string,
+  ): Promise<Record<string, string>> {
+    return this.translationService.getAllTranslations(language);
+  }
+
+  @Get(':language/:key')
+  @ApiOperation({ summary: 'Get a specific translation' })
+  async getTranslation(
+    @Param('language') language: string,
+    @Param('key') key: string,
+    @Query('namespace') namespace?: string,
+  ): Promise<{ value: string }> {
+    const value = this.translationService.getTranslation(
+      language,
+      key,
+      namespace,
+    );
+    return { value };
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Create or update a translation' })
+  async createOrUpdateTranslation(
+    @Body() dto: CreateTranslationDto,
+  ): Promise<Translation> {
+    const existing = await this.translationService.translationRepository.findOne({
+      where: {
+        language: dto.language,
+        key: dto.key,
+        namespace: dto.namespace || null,
+      },
+    });
+
+    if (existing) {
+      existing.value = dto.value;
+      await this.translationService.translationRepository.save(existing);
+      await this.translationService.loadTranslations(); // Refresh cache
+      return existing;
+    }
+
+    const translation = this.translationService.translationRepository.create(dto);
+    await this.translationService.translationRepository.save(translation);
+    await this.translationService.loadTranslations(); // Refresh cache
+    return translation;
+  }
+}`,
+      language: "typescript",
+      label: "Translation Controller"
+    }
+  ]}
+/>
+
+### Frontend Hook (Next.js)
+
+On the frontend, I created a custom React hook to fetch and use translations:
+
+<CodeBlock
+  codes={[
+    {
+      code: `import { useState, useEffect, useCallback } from 'react';
+
+interface UseTranslationOptions {
+  language: string;
+  namespace?: string;
+}
+
+export function useTranslation({ language, namespace }: UseTranslationOptions) {
+  const [translations, setTranslations] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      try {
+        const response = await fetch(
+          \`/api/translations/\${language}\${namespace ? \`?namespace=\${namespace}\` : ''}\`
+        );
+        const data = await response.json();
+        setTranslations(data);
+      } catch (error) {
+        console.error('Failed to load translations:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTranslations();
+  }, [language, namespace]);
+
+  const t = useCallback(
+    (key: string, params?: Record<string, string>): string => {
+      const fullKey = namespace ? \`\${namespace}.\${key}\` : key;
+      let translation = translations[fullKey] || key;
+
+      // Simple parameter replacement: {{name}} -> value
+      if (params) {
+        Object.entries(params).forEach(([paramKey, value]) => {
+          translation = translation.replace(
+            new RegExp(\`{{\${paramKey}}}\`, 'g'),
+            value
+          );
+        });
+      }
+
+      return translation;
+    },
+    [translations, namespace]
+  );
+
+  return { t, loading, translations };
+}`,
+      language: "typescript",
+      label: "useTranslation Hook"
+    }
+  ]}
+/>
+
+### Usage in Components
+
+Here's how you'd use it in a React component:
+
+<CodeBlock
+  codes={[
+    {
+      code: `'use client';
+
+import { useTranslation } from '@/hooks/useTranslation';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+export function WelcomeBanner() {
+  const { language } = useLanguage();
+  const { t, loading } = useTranslation({ 
+    language, 
+    namespace: 'home' 
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h1>{t('title')}</h1>
+      <p>{t('subtitle', { name: 'John' })}</p>
+      <button>{t('button.cta')}</button>
+    </div>
+  );
+}`,
+      language: "typescript",
+      label: "Component Usage"
+    }
+  ]}
+/>
+
+### Language Context Provider
+
+To manage the current language across the app:
+
+<CodeBlock
+  codes={[
+    {
+      code: `'use client';
+
+import React, { createContext, useContext, useState, useEffect } from 'react';
+
+interface LanguageContextType {
+  language: string;
+  setLanguage: (lang: string) => void;
+  availableLanguages: string[];
+}
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export function LanguageProvider({ children }: { children: React.ReactNode }) {
+  const [language, setLanguageState] = useState<string>('en');
+
+  useEffect(() => {
+    // Load saved language from localStorage
+    const saved = localStorage.getItem('preferred-language');
+    if (saved) {
+      setLanguageState(saved);
+    }
+  }, []);
+
+  const setLanguage = (lang: string) => {
+    setLanguageState(lang);
+    localStorage.setItem('preferred-language', lang);
+    // Optionally reload the page to fetch new translations
+    window.location.reload();
+  };
+
+  const availableLanguages = ['en', 'es', 'fr', 'de'];
+
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, availableLanguages }}>
+      {children}
+    </LanguageContext.Provider>
+  );
+}
+
+export function useLanguage() {
+  const context = useContext(LanguageContext);
+  if (!context) {
+    throw new Error('useLanguage must be used within LanguageProvider');
+  }
+  return context;
+}`,
+      language: "typescript",
+      label: "Language Context"
+    }
+  ]}
+/>
+
+## Key Features
+
+### 1. In-Memory Caching
+
+Translations are loaded once on server startup and cached in memory. This eliminates database queries for every translation request, resulting in sub-millisecond response times.
+
+### 2. Automatic Cache Refresh
+
+The cache refreshes every 5 minutes, so updates appear within minutes without requiring a restart. For critical updates, the admin panel can trigger an immediate refresh.
+
+### 3. Namespace Support
+
+Translations can be organized into namespaces (like 'common', 'auth', 'dashboard'), making it easier to manage large applications and load only what's needed.
+
+### 4. Type Safety
+
+While the translations themselves are dynamic, the keys can be typed using TypeScript's template literal types for better IDE support and compile-time checking.
+
+### 5. Fallback Mechanism
+
+If a translation is missing, the system falls back to the translation key itself, ensuring the UI never breaks even if translations are incomplete.
+
+## Performance Optimizations
+
+1. **Bulk Loading**: All translations for a language are fetched in a single API call
+2. **Client-Side Caching**: Translations are cached in the browser's memory
+3. **Lazy Loading**: Only load translations for the current language
+4. **CDN Caching**: API responses can be cached at the CDN level for public endpoints
+
+## Admin Panel Integration
+
+The admin panel built with Metronic and Redux allows non-technical users to:
+
+- View all translations in a table format
+- Edit translations inline
+- Add new languages
+- Search and filter translations
+- See which translations are missing for a language
+
+When a translation is updated, the change is saved to the database, and the backend cache is refreshed automatically.
+
+## Results
+
+This implementation provided:
+
+- **Zero downtime** for translation updates
+- **Sub-second** translation retrieval times
+- **Easy content management** for non-technical team members
+- **Scalability** to handle hundreds of languages and thousands of keys
+- **Type safety** with TypeScript support
+
+## Lessons Learned
+
+1. **Cache invalidation is crucial**: The automatic refresh mechanism ensures updates propagate quickly without manual intervention.
+
+2. **Design for scale**: Even if you start with 2 languages, design the system to handle 20+ languages from the beginning.
+
+3. **Provide fallbacks**: Never let missing translations break the UI. Always have a fallback strategy.
+
+4. **Monitor translation coverage**: Track which keys are missing translations for each language to ensure completeness.
+
+5. **Consider SEO**: For public-facing pages, ensure URLs reflect the language (e.g., `/en/about` vs `/es/about`) for better SEO.
+
+## Conclusion
+
+Building a dynamic multilanguage system without rebuilds requires careful architecture, but the benefits are significant. By storing translations in a database, caching them efficiently, and providing a clean API, we created a system that's both performant and flexible. The ability to update content without deployments has been a game-changer for the team, allowing faster iterations and better content management.
+
+This approach works well for applications that need frequent content updates, multiple languages, and non-technical content managers. For simpler use cases, traditional i18n libraries might be sufficient, but for enterprise applications, this database-driven approach provides the flexibility needed.
