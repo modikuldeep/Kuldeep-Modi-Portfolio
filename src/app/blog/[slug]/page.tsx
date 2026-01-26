@@ -42,13 +42,18 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: post.metadata.title,
     description: post.metadata.summary,
     baseURL: baseURL,
     image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
     path: `${blog.path}/${post.slug}`,
   });
+
+  return {
+    ...metadata,
+    keywords: post.metadata.tag ? [post.metadata.tag, ...home.keywords] : home.keywords,
+  };
 }
 
 export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
@@ -96,6 +101,41 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               name: person.name,
               url: `${baseURL}${about.path}`,
               image: `${baseURL}${person.avatar}`,
+            }}
+          />
+          
+          {/* Explicit BlogPosting Schema JSON-LD for consistent validation */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                headline: post.metadata.title,
+                description: post.metadata.summary,
+                image: post.metadata.image
+                  ? `${baseURL}${post.metadata.image}`
+                  : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
+                datePublished: post.metadata.publishedAt,
+                dateModified: post.metadata.publishedAt,
+                url: `${baseURL}${postPath}`,
+                author: {
+                  "@type": "Person",
+                  name: person.name,
+                  url: `${baseURL}${about.path}`,
+                  image: `${baseURL}${person.avatar}`,
+                },
+                publisher: {
+                  "@type": "Person",
+                  name: person.name,
+                  url: baseURL,
+                  image: `${baseURL}${person.avatar}`,
+                },
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": `${baseURL}${postPath}`,
+                },
+              }),
             }}
           />
           

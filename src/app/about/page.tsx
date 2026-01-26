@@ -19,13 +19,18 @@ import styles from "@/components/about/about.module.scss";
 import React, { Fragment } from "react";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: about.title,
     description: about.description,
     baseURL: baseURL,
     image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
     path: about.path,
   });
+
+  return {
+    ...metadata,
+    keywords: home.keywords,
+  };
 }
 
 export default function About() {
@@ -68,6 +73,31 @@ export default function About() {
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      
+      {/* Explicit WebPage Schema JSON-LD for consistent validation */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: about.title,
+            description: about.description,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}/api/og/generate?title=${encodeURIComponent(about.title)}`,
+            author: {
+              "@type": "Person",
+              name: person.name,
+              url: `${baseURL}${about.path}`,
+              image: `${baseURL}${person.avatar}`,
+            },
+            mainEntity: {
+              "@type": "Person",
+              name: person.name,
+            },
+          }),
         }}
       />
       

@@ -5,13 +5,18 @@ import { baseURL, blog, home, person, newsletter } from "@/resources";
 import { generateBreadcrumbs } from "@/utils/utils";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: blog.title,
     description: blog.description,
     baseURL: baseURL,
     image: `/api/og/generate?title=${encodeURIComponent(blog.title)}`,
     path: blog.path,
   });
+
+  return {
+    ...metadata,
+    keywords: home.keywords,
+  };
 }
 
 export default async function Blog() {
@@ -32,6 +37,27 @@ export default async function Blog() {
           name: person.name,
           url: `${baseURL}/blog`,
           image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      
+      {/* Explicit WebPage Schema JSON-LD for consistent validation */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: blog.title,
+            description: blog.description,
+            url: `${baseURL}${blog.path}`,
+            image: `${baseURL}/api/og/generate?title=${encodeURIComponent(blog.title)}`,
+            author: {
+              "@type": "Person",
+              name: person.name,
+              url: `${baseURL}${blog.path}`,
+              image: `${baseURL}${person.avatar}`,
+            },
+          }),
         }}
       />
       

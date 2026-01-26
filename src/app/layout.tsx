@@ -17,13 +17,18 @@ import {
 } from "@once-ui-system/core";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
   });
+
+  return {
+    ...metadata,
+    keywords: home.keywords,
+  };
 }
 
 export default async function RootLayout({
