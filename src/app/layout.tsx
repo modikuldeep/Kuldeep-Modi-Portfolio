@@ -5,15 +5,15 @@ import "@/resources/custom.css";
 import classNames from "classnames";
 
 import { Footer, Header, LinkTracker, Providers, RouteGuard } from "@/components";
-import { baseURL, dataStyle, effects, fonts, home, style } from "@/resources";
+import { baseURL, dataStyle, effects, fonts, home, person, schema, sameAs, social, style } from "@/resources";
 import {
   Background,
   Column,
   Flex,
   Meta,
   RevealFx,
-  SpacingToken,
-  opacity,
+  type SpacingToken,
+  type opacity,
 } from "@once-ui-system/core";
 
 export async function generateMetadata() {
@@ -45,11 +45,84 @@ export default async function RootLayout({
       )}
     >
       <head>
+        {/* RSS Feed Link for AI Crawlers */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={`${person.name}'s Blog RSS Feed`}
+          href={`${baseURL}/api/rss`}
+        />
+        
+        {/* Person Schema JSON-LD for AI Crawlers */}
         <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: person.name,
+              givenName: person.firstName,
+              familyName: person.lastName,
+              jobTitle: person.role,
+              email: person.email,
+              image: `${baseURL}${person.avatar}`,
+              url: baseURL,
+              sameAs: [
+                ...social
+                  .filter((s) => s.link && !s.link.startsWith("mailto:"))
+                  .map((s) => s.link),
+                ...(sameAs.linkedin ? [sameAs.linkedin] : []),
+                ...(sameAs.github ? [sameAs.github] : []),
+              ],
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: person.location,
+              },
+              knowsAbout: [
+                "Full Stack Development",
+                "React",
+                "Next.js",
+                "Node.js",
+                "TypeScript",
+                "MongoDB",
+                "MySQL",
+                "AWS",
+              ],
+            }),
+          }}
+        />
+        
+        {/* Website Schema JSON-LD */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: `${person.name}'s Portfolio`,
+              description: schema.description,
+              url: baseURL,
+              author: {
+                "@type": "Person",
+                name: person.name,
+              },
+              potentialAction: {
+                "@type": "SearchAction",
+                target: {
+                  "@type": "EntryPoint",
+                  urlTemplate: `${baseURL}/blog?q={search_term_string}`,
+                },
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        
+        {/* <script
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        />
+        /> */}
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -61,17 +134,17 @@ export default async function RootLayout({
                   
                   // Set defaults from config
                   const config = ${JSON.stringify({
-                    brand: style.brand,
-                    accent: style.accent,
-                    neutral: style.neutral,
-                    solid: style.solid,
-                    "solid-style": style.solidStyle,
-                    border: style.border,
-                    surface: style.surface,
-                    transition: style.transition,
-                    scaling: style.scaling,
-                    "viz-style": dataStyle.variant,
-                  })};
+              brand: style.brand,
+              accent: style.accent,
+              neutral: style.neutral,
+              solid: style.solid,
+              "solid-style": style.solidStyle,
+              border: style.border,
+              surface: style.surface,
+              transition: style.transition,
+              scaling: style.scaling,
+              "viz-style": dataStyle.variant,
+            })};
                   
                   // Apply default values
                   Object.entries(config).forEach(([key, value]) => {

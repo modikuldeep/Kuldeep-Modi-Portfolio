@@ -9,8 +9,9 @@ const person: Person = {
   role: "Full Stack Developer",
   avatar: "/images/Kuldeep.jpg",
   email: "kuldeepmodi95@gmail.com",
-  location: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Hindi"], // optional: Leave the array empty if you don't want to display languages
+  location: "Ahmedabad, India",
+  timeZone: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
+  languages: ["English", "Hindi", "Gujarati"], // optional: Leave the array empty if you don't want to display languages
 };
 
 const newsletter: Newsletter = {
@@ -45,12 +46,12 @@ const social: Social = [
     link: `mailto:${person.email}`,
     essential: true,
   },
-  {
-    name: "WhatsApp",
-    icon: "whatsapp",
-    link: "https://wa.me/919558155439?text=Hello",
-    essential: true,
-  },
+  // {
+  //   name: "WhatsApp",
+  //   icon: "whatsapp",
+  //   link: "https://wa.me/919558155439?text=Hello",
+  //   essential: true,
+  // },
 ];
 
 const home: Home = {
@@ -436,3 +437,4 @@ const gallery: Gallery = {
 };
 
 export { about, blog, gallery, home, newsletter, person, social, work };
+
