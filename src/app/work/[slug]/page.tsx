@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getPosts } from "@/utils/utils";
+import { generateBreadcrumbs, getPosts } from "@/utils/utils";
 import {
   Meta,
   Schema,
@@ -15,7 +15,7 @@ import {
   Avatar,
   Line,
 } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
+import { baseURL, about, home, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import type { Metadata } from "next";
@@ -73,12 +73,18 @@ export default async function Project({
       src: person.avatar,
     })) || [];
 
+  const projectPath = `${work.path}/${post.slug}`;
+  const breadcrumbs = generateBreadcrumbs(baseURL, projectPath, post.metadata.title, {
+    "/": { label: home.label, path: home.path },
+    "/work": { label: work.label, path: work.path },
+  });
+
   return (
     <Column as="section" maxWidth="m" horizontal="center" gap="l">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
-        path={`${work.path}/${post.slug}`}
+        path={projectPath}
         title={post.metadata.title}
         description={post.metadata.summary}
         datePublished={post.metadata.publishedAt}
@@ -90,6 +96,23 @@ export default async function Project({
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: breadcrumbs.map((crumb, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: crumb.name,
+              item: crumb.url,
+            })),
+          }),
         }}
       />
       <Column maxWidth="s" gap="16" horizontal="center" align="center">

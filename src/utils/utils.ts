@@ -72,3 +72,42 @@ export function getPosts(customPath = ["", "", "", ""]) {
   const postsDir = path.join(process.cwd(), ...customPath);
   return getMDXData(postsDir);
 }
+
+/**
+ * Generate breadcrumb list for structured data
+ */
+export function generateBreadcrumbs(
+  baseURL: string,
+  path: string,
+  title: string,
+  routes: Record<string, { label: string; path: string }>,
+): Array<{ name: string; url: string }> {
+  const breadcrumbs: Array<{ name: string; url: string }> = [
+    { name: "Home", url: baseURL },
+  ];
+
+  // Split path and build breadcrumbs
+  const pathParts = path.split("/").filter(Boolean);
+  let currentPath = "";
+
+  for (const part of pathParts) {
+    currentPath += `/${part}`;
+    const route = routes[currentPath];
+    if (route) {
+      breadcrumbs.push({
+        name: route.label,
+        url: `${baseURL}${currentPath}`,
+      });
+    }
+  }
+
+  // Add current page (if different from last breadcrumb)
+  if (breadcrumbs[breadcrumbs.length - 1]?.url !== `${baseURL}${path}`) {
+    breadcrumbs.push({
+      name: title,
+      url: `${baseURL}${path}`,
+    });
+  }
+
+  return breadcrumbs;
+}

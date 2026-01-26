@@ -1,9 +1,9 @@
 import { CustomMDX, ScrollToHash } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
-import { about, baseURL, blog, person } from "@/resources";
+import { about, baseURL, blog, home, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { getPosts } from "@/utils/utils";
+import { generateBreadcrumbs, getPosts } from "@/utils/utils";
 import {
   Avatar,
   Column,
@@ -68,15 +68,22 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
       src: person.avatar,
     })) || [];
 
+  const postPath = `${blog.path}/${post.slug}`;
+  const breadcrumbs = generateBreadcrumbs(baseURL, postPath, post.metadata.title, {
+    "/": { label: home.label, path: home.path },
+    "/blog": { label: blog.label, path: blog.path },
+  });
+
   return (
     <Row fillWidth>
       <Row maxWidth={12} m={{ hide: true }} />
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
+          {/* BlogPosting Schema */}
           <Schema
             as="blogPosting"
             baseURL={baseURL}
-            path={`${blog.path}/${post.slug}`}
+            path={postPath}
             title={post.metadata.title}
             description={post.metadata.summary}
             datePublished={post.metadata.publishedAt}
@@ -89,6 +96,59 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               name: person.name,
               url: `${baseURL}${about.path}`,
               image: `${baseURL}${person.avatar}`,
+            }}
+          />
+          
+          {/* Article Schema for enhanced AI understanding */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "Article",
+                headline: post.metadata.title,
+                description: post.metadata.summary,
+                image: post.metadata.image
+                  ? `${baseURL}${post.metadata.image}`
+                  : `${baseURL}/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`,
+                datePublished: post.metadata.publishedAt,
+                dateModified: post.metadata.publishedAt,
+                author: {
+                  "@type": "Person",
+                  name: person.name,
+                  url: `${baseURL}${about.path}`,
+                  image: `${baseURL}${person.avatar}`,
+                },
+                publisher: {
+                  "@type": "Person",
+                  name: person.name,
+                  url: baseURL,
+                  image: `${baseURL}${person.avatar}`,
+                },
+                mainEntityOfPage: {
+                  "@type": "WebPage",
+                  "@id": `${baseURL}${postPath}`,
+                },
+                articleSection: blog.label,
+                keywords: post.metadata.tag || undefined,
+              }),
+            }}
+          />
+          
+          {/* BreadcrumbList Schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "BreadcrumbList",
+                itemListElement: breadcrumbs.map((crumb, index) => ({
+                  "@type": "ListItem",
+                  position: index + 1,
+                  name: crumb.name,
+                  item: crumb.url,
+                })),
+              }),
             }}
           />
           <Column maxWidth="s" gap="16" horizontal="center" align="center">

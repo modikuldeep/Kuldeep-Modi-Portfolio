@@ -12,7 +12,8 @@ import {
   Schema,
   Row,
 } from "@once-ui-system/core";
-import { baseURL, about, person, social } from "@/resources";
+import { baseURL, about, home, person, social } from "@/resources";
+import { generateBreadcrumbs } from "@/utils/utils";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React, { Fragment } from "react";
@@ -50,6 +51,10 @@ export default function About() {
       items: about.technical.skills.map((skill) => skill.title),
     },
   ];
+  const breadcrumbs = generateBreadcrumbs(baseURL, about.path, about.title, {
+    "/": { label: home.label, path: home.path },
+  });
+
   return (
     <Column maxWidth="m">
       <Schema
@@ -63,6 +68,23 @@ export default function About() {
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: breadcrumbs.map((crumb, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: crumb.name,
+              item: crumb.url,
+            })),
+          }),
         }}
       />
       {about.tableOfContent.display && (

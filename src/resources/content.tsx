@@ -58,8 +58,9 @@ const home: Home = {
   path: "/",
   image: "/images/og/kuldeep-og.jpg",
   label: "Home",
-  title: `${person.name}'s Portfolio`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
+  title: `${person.name} | ${person.role} | Portfolio`,
+  description: `Discover the portfolio of ${person.name}, a highly skilled ${person.role} based in ${person.location}. Explore innovative projects, case studies, and web applications built with the latest technologies in full stack development, React, Node.js, and Next.js.`,
+  keywords: ["Full Stack Developer", "React Developer", "Node.js Developer", "Next.js Developer", "Portfolio", "Web Development", "Web Applications", "Full Stack Development", "React", "Node.js", "Next.js", "Ahmedabad", "India", "Kuldeep Modi", "Software Engineer", "Software Developer", "Software Architect", "Software Engineer", "Software Developer", "Software Architect"],
   headline: <>Building scalable web applications and innovative solutions</>,
   featured: {
     display: true,

@@ -52,7 +52,7 @@ export default async function RootLayout({
           title={`${person.name}'s Blog RSS Feed`}
           href={`${baseURL}/api/rss`}
         />
-        
+
         {/* Person Schema JSON-LD for AI Crawlers */}
         <script
           type="application/ld+json"
@@ -78,20 +78,11 @@ export default async function RootLayout({
                 "@type": "PostalAddress",
                 addressLocality: person.location,
               },
-              knowsAbout: [
-                "Full Stack Development",
-                "React",
-                "Next.js",
-                "Node.js",
-                "TypeScript",
-                "MongoDB",
-                "MySQL",
-                "AWS",
-              ],
+              knowsAbout: home.keywords,
             }),
           }}
         />
-        
+
         {/* Website Schema JSON-LD */}
         <script
           type="application/ld+json"

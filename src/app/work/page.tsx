@@ -1,5 +1,6 @@
 import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
+import { baseURL, about, home, person, work } from "@/resources";
+import { generateBreadcrumbs } from "@/utils/utils";
 import { Projects } from "@/components/work/Projects";
 
 export async function generateMetadata() {
@@ -13,6 +14,10 @@ export async function generateMetadata() {
 }
 
 export default async function Work() {
+  const breadcrumbs = generateBreadcrumbs(baseURL, work.path, work.title, {
+    "/": { label: home.label, path: home.path },
+  });
+
   return (
     <Column maxWidth="m" paddingTop="24">
       <Schema
@@ -26,6 +31,23 @@ export default async function Work() {
           name: person.name,
           url: `${baseURL}${about.path}`,
           image: `${baseURL}${person.avatar}`,
+        }}
+      />
+      
+      {/* BreadcrumbList Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: breadcrumbs.map((crumb, index) => ({
+              "@type": "ListItem",
+              position: index + 1,
+              name: crumb.name,
+              item: crumb.url,
+            })),
+          }),
         }}
       />
       <Heading marginBottom="l" variant="heading-strong-xl" align="center">
