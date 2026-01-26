@@ -13,7 +13,18 @@ export const Footer = () => {
   };
 
   return (
-    <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
+    <Row 
+      as="footer" 
+      fillWidth 
+      padding="8" 
+      horizontal="center" 
+      s={{ direction: "column" }}
+      style={{ 
+        minHeight: "159px",
+        // Prevent layout shifts by reserving space for all content
+        containIntrinsicSize: "auto 159px"
+      }}
+    >
       <Row
         className={styles.mobile}
         maxWidth="m"
@@ -26,6 +37,10 @@ export const Footer = () => {
           direction: "column",
           horizontal: "center",
           align: "center",
+        }}
+        style={{
+          // Ensure content doesn't shift when loading
+          minHeight: "103px"
         }}
       >
         <Text variant="body-default-s" onBackground="neutral-strong">

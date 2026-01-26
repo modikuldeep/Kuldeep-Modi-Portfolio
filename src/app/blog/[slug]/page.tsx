@@ -1,7 +1,12 @@
+import dynamic from "next/dynamic";
 import { CustomMDX, ScrollToHash } from "@/components";
-import { Posts } from "@/components/blog/Posts";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { about, baseURL, blog, home, person } from "@/resources";
+
+// Code splitting: Load Posts component dynamically
+const Posts = dynamic(() => import("@/components/blog/Posts").then((mod) => ({ default: mod.Posts })), {
+  loading: () => null,
+});
 import { formatDate } from "@/utils/formatDate";
 import { generateBreadcrumbs, getPosts } from "@/utils/utils";
 import {

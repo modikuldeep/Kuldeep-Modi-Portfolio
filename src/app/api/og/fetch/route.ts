@@ -15,14 +15,14 @@ function decodeHTMLEntities(text: string): string {
       '#x26': '&',
       '#38': '&'
     };
-    
+
     if (entity.startsWith('#')) {
-      const code = entity.startsWith('#x') ? 
-        Number.parseInt(entity.slice(2), 16) : 
+      const code = entity.startsWith('#x') ?
+        Number.parseInt(entity.slice(2), 16) :
         Number.parseInt(entity.slice(1), 10);
       return String.fromCharCode(code);
     }
-    
+
     return entities[entity] || match;
   });
 }
@@ -32,7 +32,7 @@ async function fetchWithTimeout(url: string, timeout = 5000) {
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(url, { 
+    const response = await fetch(url, {
       signal: controller.signal,
       headers: {
         'User-Agent': 'bot'
@@ -48,7 +48,7 @@ async function fetchWithTimeout(url: string, timeout = 5000) {
 
 async function extractMetadata(html: string) {
   const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
-  const descMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]+)"[^>]*>/i) 
+  const descMatch = html.match(/<meta[^>]*name="description"[^>]*content="([^"]+)"[^>]*>/i)
     || html.match(/<meta[^>]*content="([^"]+)"[^>]*name="description"[^>]*>/i)
     || html.match(/<meta[^>]*property="og:description"[^>]*content="([^"]+)"[^>]*>/i);
   const imageMatch = html.match(/<meta[^>]*property="og:image"[^>]*content="([^"]+)"[^>]*>/i)
@@ -75,7 +75,7 @@ export async function GET(request: Request) {
 
   try {
     const response = await fetchWithTimeout(url);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to fetch URL: ${response.status}`);
     }
@@ -89,8 +89,8 @@ export async function GET(request: Request) {
     });
   } catch (error) {
     console.error('Error fetching metadata:', error instanceof Error ? error.message : String(error));
-    
-    return NextResponse.json({ 
+
+    return NextResponse.json({
       error: 'Failed to fetch metadata',
       message: error instanceof Error ? error.message : 'Unknown error occurred',
     }, { status: 500 });

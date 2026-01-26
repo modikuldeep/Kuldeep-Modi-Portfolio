@@ -1,7 +1,14 @@
+import dynamic from "next/dynamic";
 import { Mailchimp } from "@/components";
-import { Posts } from "@/components/blog/Posts";
-import { Projects } from "@/components/work/Projects";
 import { about, baseURL, home, person, routes, social } from "@/resources";
+
+// Code splitting: Load these components dynamically to reduce initial bundle size
+const Posts = dynamic(() => import("@/components/blog/Posts").then((mod) => ({ default: mod.Posts })), {
+  loading: () => null,
+});
+const Projects = dynamic(() => import("@/components/work/Projects").then((mod) => ({ default: mod.Projects })), {
+  loading: () => null,
+});
 import {
   Avatar,
   Badge,

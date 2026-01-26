@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import dynamic from "next/dynamic";
 import { generateBreadcrumbs, getPosts } from "@/utils/utils";
 import {
   Meta,
@@ -19,7 +20,11 @@ import { baseURL, about, home, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
 import type { Metadata } from "next";
-import { Projects } from "@/components/work/Projects";
+
+// Code splitting: Load Projects component dynamically
+const Projects = dynamic(() => import("@/components/work/Projects").then((mod) => ({ default: mod.Projects })), {
+  loading: () => null,
+});
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "work", "projects"]);

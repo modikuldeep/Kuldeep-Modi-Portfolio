@@ -50,6 +50,14 @@ export default async function RootLayout({
       )}
     >
       <head>
+        {/* Resource Hints for Performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload avatar image instead of OG image - avatar is likely the LCP element */}
+        {person.avatar && (
+          <link rel="preload" href="/images/projects/sales-and-manufacturing-crm/dashboard.png" as="image" />
+        )}
+
         {/* RSS Feed Link for AI Crawlers */}
         <link
           rel="alternate"
