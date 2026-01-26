@@ -117,12 +117,12 @@ export default async function RootLayout({
             }),
           }}
         />
-        
-        {/* <script
+        <meta name="google-site-verification" content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw" />
+        <script
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        /> */}
+        />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
