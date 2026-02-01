@@ -1,11 +1,19 @@
+import "@/resources/custom.css";
 import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
-import "@/resources/custom.css";
-
-import classNames from "classnames";
-
 import { Footer, Header, LinkTracker, Providers, RouteGuard } from "@/components";
-import { baseURL, dataStyle, effects, fonts, home, person, schema, sameAs, social, style } from "@/resources";
+import {
+  baseURL,
+  dataStyle,
+  effects,
+  fonts,
+  home,
+  person,
+  schema,
+  sameAs,
+  social,
+  style,
+} from "@/resources";
 import {
   Background,
   Column,
@@ -15,6 +23,7 @@ import {
   type SpacingToken,
   type opacity,
 } from "@once-ui-system/core";
+import classNames from "classnames";
 
 export async function generateMetadata() {
   const metadata = Meta.generate({
@@ -50,12 +59,19 @@ export default async function RootLayout({
       )}
     >
       <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         {/* Resource Hints for Performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Preload avatar image instead of OG image - avatar is likely the LCP element */}
         {person.avatar && (
-          <link rel="preload" href="/images/projects/sales-and-manufacturing-crm/dashboard.png" as="image" />
+          <link
+            rel="preload"
+            href="/images/projects/sales-and-manufacturing-crm/dashboard.png"
+            as="image"
+          />
         )}
 
         {/* RSS Feed Link for AI Crawlers */}
@@ -81,9 +97,7 @@ export default async function RootLayout({
               image: `${baseURL}${person.avatar}`,
               url: baseURL,
               sameAs: [
-                ...social
-                  .filter((s) => s.link && !s.link.startsWith("mailto:"))
-                  .map((s) => s.link),
+                ...social.filter((s) => s.link && !s.link.startsWith("mailto:")).map((s) => s.link),
                 ...(sameAs.linkedin ? [sameAs.linkedin] : []),
                 ...(sameAs.github ? [sameAs.github] : []),
               ],
@@ -121,12 +135,12 @@ export default async function RootLayout({
             }),
           }}
         />
-        <meta name="google-site-verification" content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw" />
+        {/* <meta name="google-site-verification" content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw" />
         <script
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        />
+        /> */}
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -138,17 +152,17 @@ export default async function RootLayout({
                   
                   // Set defaults from config
                   const config = ${JSON.stringify({
-              brand: style.brand,
-              accent: style.accent,
-              neutral: style.neutral,
-              solid: style.solid,
-              "solid-style": style.solidStyle,
-              border: style.border,
-              surface: style.surface,
-              transition: style.transition,
-              scaling: style.scaling,
-              "viz-style": dataStyle.variant,
-            })};
+                    brand: style.brand,
+                    accent: style.accent,
+                    neutral: style.neutral,
+                    solid: style.solid,
+                    "solid-style": style.solidStyle,
+                    border: style.border,
+                    surface: style.surface,
+                    transition: style.transition,
+                    scaling: style.scaling,
+                    "viz-style": dataStyle.variant,
+                  })};
                   
                   // Apply default values
                   Object.entries(config).forEach(([key, value]) => {

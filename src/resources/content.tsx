@@ -8,6 +8,7 @@ const person: Person = {
   name: "Kuldeep Modi",
   role: "Full Stack Developer",
   avatar: "/images/Kuldeep.jpg",
+  logo: "/images/logo.png",
   email: "kuldeepmodi95@gmail.com",
   location: "Ahmedabad, India",
   timeZone: "Asia/Kolkata", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
@@ -56,11 +57,32 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/og/kuldeep-og.jpg",
+  image: "/images/og/og-image.webp",
   label: "Home",
   title: `${person.name} | ${person.role} | Portfolio`,
   description: `Discover the portfolio of ${person.name}, a highly skilled ${person.role} based in ${person.location}. Explore innovative projects, case studies, and web applications built with the latest technologies in full stack development, React, Node.js, and Next.js.`,
-  keywords: ["Full Stack Developer", "React Developer", "Node.js Developer", "Next.js Developer", "Portfolio", "Web Development", "Web Applications", "Full Stack Development", "React", "Node.js", "Next.js", "Ahmedabad", "India", "Kuldeep Modi", "Software Engineer", "Software Developer", "Software Architect", "Software Engineer", "Software Developer", "Software Architect"],
+  keywords: [
+    "Full Stack Developer",
+    "React Developer",
+    "Node.js Developer",
+    "Next.js Developer",
+    "Portfolio",
+    "Web Development",
+    "Web Applications",
+    "Full Stack Development",
+    "React",
+    "Node.js",
+    "Next.js",
+    "Ahmedabad",
+    "India",
+    "Kuldeep Modi",
+    "Software Engineer",
+    "Software Developer",
+    "Software Architect",
+    "Software Engineer",
+    "Software Developer",
+    "Software Architect",
+  ],
   headline: <>Building scalable web applications and innovative solutions</>,
   featured: {
     display: true,
@@ -438,4 +460,3 @@ const gallery: Gallery = {
 };
 
 export { about, blog, gallery, home, newsletter, person, social, work };
-

@@ -21,6 +21,8 @@ export type Person = {
   role: string;
   /** Path to avatar image */
   avatar: string;
+  /** Path to logo image */
+  logo: string;
   /** Email address */
   email: string;
   /** Location of the person */
