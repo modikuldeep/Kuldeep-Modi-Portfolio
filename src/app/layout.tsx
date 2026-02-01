@@ -9,8 +9,8 @@ import {
   fonts,
   home,
   person,
-  schema,
   sameAs,
+  schema,
   social,
   style,
 } from "@/resources";
@@ -59,20 +59,9 @@ export default async function RootLayout({
       )}
     >
       <head>
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         {/* Resource Hints for Performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* Preload avatar image instead of OG image - avatar is likely the LCP element */}
-        {person.avatar && (
-          <link
-            rel="preload"
-            href="/images/projects/sales-and-manufacturing-crm/dashboard.png"
-            as="image"
-          />
-        )}
 
         {/* RSS Feed Link for AI Crawlers */}
         <link
@@ -135,12 +124,15 @@ export default async function RootLayout({
             }),
           }}
         />
-        {/* <meta name="google-site-verification" content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw" />
+        <meta
+          name="google-site-verification"
+          content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw"
+        />
         <script
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        /> */}
+        />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
