@@ -1,13 +1,19 @@
 "use client";
 
 import { useEffect } from "react";
-import { trackLinkClick } from "@/utils/analytics";
+import { captureRefParamsFromUrl, trackLinkClick } from "@/utils/analytics";
 
 /**
  * Component to automatically track link clicks using Umami data attributes
- * and also programmatically track clicks for links without data attributes
+ * and also programmatically track clicks for links without data attributes.
+ * Also captures ref/UTM params from the URL (e.g. ?ref=ref_place) and sends to Umami.
  */
 export function LinkTracker() {
+  // Capture ref and UTM params from URL on load (e.g. ?ref=ref_place)
+  useEffect(() => {
+    captureRefParamsFromUrl();
+  }, []);
+
   useEffect(() => {
     // Track clicks on links with data-umami-event attribute
     const handleLinkClick = (e: MouseEvent) => {

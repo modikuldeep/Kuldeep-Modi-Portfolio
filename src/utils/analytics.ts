@@ -181,3 +181,32 @@ export function trackThemeToggle(theme: string): void {
     theme,
   });
 }
+
+/** Query param names to capture as referral/attribution (e.g. ?ref=ref_place) */
+const REF_PARAM_KEYS = ['ref', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'] as const;
+
+/**
+ * Read ref and UTM params from the current URL (client-side only).
+ * @returns Object with present params only (e.g. { ref: 'ref_place' })
+ */
+export function getRefParamsFromUrl(): Record<string, string> {
+  if (typeof window === 'undefined') return {};
+  const params = new URLSearchParams(window.location.search);
+  const result: Record<string, string> = {};
+  for (const key of REF_PARAM_KEYS) {
+    const value = params.get(key);
+    if (value) result[key] = value;
+  }
+  return result;
+}
+
+/**
+ * Capture ref (and optional UTM) params from the URL and send to Umami as a single event.
+ * Call once on app load (e.g. in a layout client component) so landings like ?ref=ref_place are tracked.
+ */
+export function captureRefParamsFromUrl(): void {
+  if (typeof window === 'undefined') return;
+  const refParams = getRefParamsFromUrl();
+  if (Object.keys(refParams).length === 0) return;
+  trackEvent('ref-landing', refParams);
+}

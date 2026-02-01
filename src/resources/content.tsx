@@ -36,6 +36,18 @@ const social: Social = [
     essential: true,
   },
   {
+    name: "Medium",
+    icon: "medium",
+    link: "https://kuldeep-modi.medium.com",
+    essential: true,
+  },
+  {
+    name: "Dev.to",
+    icon: "dev",
+    link: "https://dev.to/kuldeep-modi",
+    essential: true,
+  },
+  {
     name: "LinkedIn",
     icon: "linkedin",
     link: "https://linkedin.com/in/kuldeep-modi",
