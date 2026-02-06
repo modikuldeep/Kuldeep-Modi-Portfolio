@@ -21,7 +21,7 @@ import {
   Schema,
   SmartLink,
   Text,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 

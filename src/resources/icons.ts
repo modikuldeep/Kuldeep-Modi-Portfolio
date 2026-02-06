@@ -12,6 +12,8 @@ import {
   HiOutlineGlobeAsiaAustralia,
   HiOutlineLink,
   HiOutlineRocketLaunch,
+  HiMoon,
+  HiSun,
 } from "react-icons/hi2";
 
 import {
@@ -87,6 +89,8 @@ export const iconLibrary: Record<string, IconType> = {
   instagram: FaInstagram,
   medium: FaMedium,
   dev: FaDev,
+  light: HiSun,
+  dark: HiMoon,
 };
 
 export type IconLibrary = typeof iconLibrary;

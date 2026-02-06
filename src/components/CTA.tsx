@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Column, Row, Text } from "@once-ui-system/core";
+import { Button, Column, Row, Text } from "@/components/ui";
 import classNames from "classnames";
 
 export interface CTAProps {

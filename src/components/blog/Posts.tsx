@@ -1,5 +1,5 @@
 import { getPosts } from "@/utils/utils";
-import { Grid } from "@once-ui-system/core";
+import { Grid } from "@/components/ui";
 import Post from "./Post";
 
 interface PostsProps {

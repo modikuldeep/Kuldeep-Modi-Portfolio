@@ -1,6 +1,6 @@
 "use client";
 
-import { Row, Text, Button, useToast } from "@once-ui-system/core";
+import { Row, Text, Button, useToast } from "@/components/ui";
 import { socialSharing } from "@/resources";
 
 interface ShareSectionProps {
@@ -84,14 +84,12 @@ export function ShareSection({ title, url }: ShareSectionProps) {
     try {
       await navigator.clipboard.writeText(url);
       addToast({
-        variant: "success",
-        message: "Link copied to clipboard",
+        title: "Link copied to clipboard",
       });
     } catch (err) {
       console.error("Failed to copy: ", err);
       addToast({
-        variant: "danger",
-        message: "Failed to copy link",
+        title: "Failed to copy link",
       });
     }
   };

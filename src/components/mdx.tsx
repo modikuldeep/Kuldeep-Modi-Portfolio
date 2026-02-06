@@ -4,7 +4,6 @@ import { slugify as transliterate } from "transliteration";
 
 import {
   Heading,
-  HeadingLink,
   Text,
   InlineCode,
   CodeBlock,
@@ -25,8 +24,9 @@ import {
   List,
   ListItem,
   Line,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { CTA } from "@/components/CTA";
+import { HeadingLink } from "@/components/HeadingLink";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;

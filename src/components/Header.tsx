@@ -1,7 +1,7 @@
 "use client";
 
 import { about, blog, display, gallery, person, routes, work } from "@/resources";
-import { Column, Fade, Flex, Line, Logo, Media, Row, ToggleButton } from "@once-ui-system/core";
+import { Column, Fade, Flex, Line, Logo, Row, ToggleButton } from "@/components/ui";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.scss";

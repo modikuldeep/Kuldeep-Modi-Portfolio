@@ -22,7 +22,7 @@ import {
   Row,
   Schema,
   Text,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { HomeClient } from "./HomeClient";
 
 export async function generateMetadata() {

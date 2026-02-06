@@ -1,6 +1,6 @@
 "use client";
 
-import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
+import { Row, IconButton, SmartLink, Text } from "@/components/ui";
 import { person, social } from "@/resources";
 import { trackSocialClick } from "@/utils/analytics";
 import styles from "./Footer.module.scss";

@@ -32,10 +32,7 @@ const nextConfig = {
       exclude: ["error", "warn"],
     } : false,
   },
-  // Experimental features for better performance
-  experimental: {
-    optimizePackageImports: ["@once-ui-system/core"],
-  },
+  experimental: {},
 };
 
 export default withMDX(nextConfig);

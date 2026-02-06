@@ -1,18 +1,25 @@
 "use client";
 
 import React, { JSX } from "react";
-import { Heading, Flex, IconButton, useToast } from "@once-ui-system/core";
+import { Heading, Flex, IconButton, useToast } from "@/components/ui";
 
 import styles from "@/components/HeadingLink.module.scss";
 
-interface HeadingLinkProps {
+interface HeadingLinkProps extends React.ComponentProps<typeof Flex> {
   id: string;
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  as?: keyof JSX.IntrinsicElements;
   children: React.ReactNode;
-  style?: React.CSSProperties;
 }
 
-export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, style }) => {
+export const HeadingLink: React.FC<HeadingLinkProps> = ({
+  id,
+  level,
+  as,
+  children,
+  style,
+  ...props
+}) => {
   const { addToast } = useToast();
 
   const copyURL = (id: string): void => {
@@ -20,14 +27,12 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
     navigator.clipboard.writeText(url).then(
       () => {
         addToast({
-          variant: "success",
-          message: "Link copied to clipboard.",
+          title: "Link copied to clipboard.",
         });
       },
       () => {
         addToast({
-          variant: "danger",
-          message: "Failed to copy link.",
+          title: "Failed to copy link.",
         });
       },
     );
@@ -42,8 +47,9 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
     6: "heading-strong-xs",
   } as const;
 
-  const variant = variantMap[level];
-  const asTag = `h${level}` as keyof JSX.IntrinsicElements;
+  const resolvedLevel = level || (as ? Number(as.replace("h", "")) : 2);
+  const variant = variantMap[resolvedLevel as keyof typeof variantMap];
+  const asTag = (as || `h${resolvedLevel}`) as keyof JSX.IntrinsicElements;
 
   return (
     <Flex
@@ -52,6 +58,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
       className={styles.control}
       vertical="center"
       gap="4"
+      {...props}
     >
       <Heading className={styles.text} id={id} variant={variant} as={asTag}>
         {children}
@@ -62,7 +69,6 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
         icon="openLink"
         variant="ghost"
         tooltip="Copy"
-        tooltipPosition="right"
       />
     </Flex>
   );

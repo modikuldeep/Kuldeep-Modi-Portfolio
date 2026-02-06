@@ -11,7 +11,7 @@ import {
   Meta,
   Schema,
   Row,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { baseURL, about, home, person, social } from "@/resources";
 import { generateBreadcrumbs } from "@/utils/utils";
 import TableOfContents from "@/components/about/TableOfContents";

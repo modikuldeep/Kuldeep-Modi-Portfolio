@@ -13,7 +13,7 @@ import {
   RevealFx,
   Row,
   Text,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 
 interface HomeClientProps {
   projectsComponent: React.ReactNode;
