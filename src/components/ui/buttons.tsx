@@ -52,7 +52,13 @@ export function Button({
     const isExternal = href.startsWith("http") || href.startsWith("mailto:");
     if (isExternal) {
       return (
-        <a href={href} className={classes} target="_blank" rel="noopener noreferrer">
+        <a
+          href={href}
+          className={classes}
+          target="_blank"
+          rel="noopener noreferrer"
+          {...props}
+        >
           {prefixIcon && <Icon name={prefixIcon} className="text-current" />}
           {children}
           {suffixIcon && <Icon name={suffixIcon} className="text-current" />}
@@ -61,7 +67,7 @@ export function Button({
     }
 
     return (
-      <Link href={href} className={classes}>
+      <Link href={href} className={classes} {...props}>
         {prefixIcon && <Icon name={prefixIcon} className="text-current" />}
         {children}
         {suffixIcon && <Icon name={suffixIcon} className="text-current" />}
