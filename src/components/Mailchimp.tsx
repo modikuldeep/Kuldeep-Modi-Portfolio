@@ -1,8 +1,7 @@
 "use client";
 
 import { mailchimp, newsletter } from "@/resources";
-import { Background, Button, Column, Heading, Input, Row, Text } from "@once-ui-system/core";
-import type { SpacingToken, opacity } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Input, Row, Text } from "@/components/ui";
 import { useState } from "react";
 
 function debounce<T extends (...args: unknown[]) => void>(func: T, delay: number): T {
@@ -51,20 +50,19 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
 
   return (
     <Column
-      overflow="hidden"
+      className="overflow-hidden"
       fillWidth
       padding="xl"
       radius="l"
       marginBottom="m"
       horizontal="center"
-      align="center"
+      vertical="center"
       background="surface"
       border="neutral-alpha-weak"
       {...flex}
     >
       <Background
-        top="0"
-        position="absolute"
+        className="top-0"
         mask={{
           x: mailchimp.effects.mask.x,
           y: mailchimp.effects.mask.y,
@@ -73,7 +71,7 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         }}
         gradient={{
           display: mailchimp.effects.gradient.display,
-          opacity: mailchimp.effects.gradient.opacity as opacity,
+          opacity: mailchimp.effects.gradient.opacity,
           x: mailchimp.effects.gradient.x,
           y: mailchimp.effects.gradient.y,
           width: mailchimp.effects.gradient.width,
@@ -84,21 +82,21 @@ export const Mailchimp: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         }}
         dots={{
           display: mailchimp.effects.dots.display,
-          opacity: mailchimp.effects.dots.opacity as opacity,
-          size: mailchimp.effects.dots.size as SpacingToken,
+          opacity: mailchimp.effects.dots.opacity,
+          size: mailchimp.effects.dots.size,
           color: mailchimp.effects.dots.color,
         }}
         grid={{
           display: mailchimp.effects.grid.display,
-          opacity: mailchimp.effects.grid.opacity as opacity,
+          opacity: mailchimp.effects.grid.opacity,
           color: mailchimp.effects.grid.color,
           width: mailchimp.effects.grid.width,
           height: mailchimp.effects.grid.height,
         }}
         lines={{
           display: mailchimp.effects.lines.display,
-          opacity: mailchimp.effects.lines.opacity as opacity,
-          size: mailchimp.effects.lines.size as SpacingToken,
+          opacity: mailchimp.effects.lines.opacity,
+          size: mailchimp.effects.lines.size,
           thickness: mailchimp.effects.lines.thickness,
           angle: mailchimp.effects.lines.angle,
           color: mailchimp.effects.lines.color,

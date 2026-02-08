@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Column, Flex, Text } from "@once-ui-system/core";
+import { Column, Flex, Text } from "@/components/ui";
 import styles from "./about.module.scss";
 
 interface TableOfContentsProps {
@@ -36,7 +36,7 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
 
   return (
     <Column
-      left="0"
+      className="left-0 m:hidden"
       style={{
         top: "50%",
         transform: "translateY(-50%)",
@@ -45,15 +45,13 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
       position="fixed"
       paddingLeft="24"
       gap="32"
-      m={{ hide: true }}
     >
       {structure
         .filter((section) => section.display)
         .map((section, sectionIndex) => (
           <Column key={sectionIndex} gap="12">
             <Flex
-              cursor="interactive"
-              className={styles.hover}
+              className={`${styles.hover} cursor-pointer`}
               gap="8"
               vertical="center"
               onClick={() => scrollTo(section.title, 80)}
@@ -65,10 +63,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
               <>
                 {section.items.map((item, itemIndex) => (
                   <Flex
-                    l={{ hide: true }}
                     key={itemIndex}
-                    style={{ cursor: "pointer" }}
-                    className={styles.hover}
+                    className={`${styles.hover} cursor-pointer l:hidden`}
                     gap="12"
                     paddingLeft="24"
                     vertical="center"

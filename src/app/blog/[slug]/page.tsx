@@ -21,7 +21,7 @@ import {
   Schema,
   SmartLink,
   Text,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -86,7 +86,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
 
   return (
     <Row fillWidth>
-      <Row maxWidth={12} m={{ hide: true }} />
+      <Row maxWidth={12} className="m:hidden" />
       <Row fillWidth horizontal="center">
         <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
           {/* BlogPosting Schema */}
@@ -196,7 +196,7 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
               }),
             }}
           />
-          <Column maxWidth="s" gap="16" horizontal="center" align="center">
+          <Column maxWidth="s" gap="16" horizontal="center" vertical="center" className="text-center">
             <SmartLink href="/blog">
               <Text variant="label-strong-m">Blog</Text>
             </SmartLink>
@@ -259,9 +259,9 @@ export default async function Blog({ params }: { params: Promise<{ slug: string 
         position="sticky"
         top="80"
         gap="16"
-        m={{ hide: true }}
+        className="m:hidden"
       >
-        <HeadingNav fitHeight />
+        <HeadingNav />
       </Column>
     </Row>
   );

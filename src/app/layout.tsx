@@ -1,6 +1,4 @@
-import "@/resources/custom.css";
-import "@once-ui-system/core/css/styles.css";
-import "@once-ui-system/core/css/tokens.css";
+import "@/app/globals.css";
 import { Footer, Header, LinkTracker, Providers, RouteGuard } from "@/components";
 import {
   baseURL,
@@ -14,15 +12,7 @@ import {
   social,
   style,
 } from "@/resources";
-import {
-  Background,
-  Column,
-  Flex,
-  Meta,
-  RevealFx,
-  type SpacingToken,
-  type opacity,
-} from "@once-ui-system/core";
+import { Background, Column, Flex, Meta, RevealFx } from "@/components/ui";
 import classNames from "classnames";
 
 export async function generateMetadata() {
@@ -212,7 +202,7 @@ export default async function RootLayout({
               }}
               gradient={{
                 display: effects.gradient.display,
-                opacity: effects.gradient.opacity as opacity,
+                opacity: effects.gradient.opacity,
                 x: effects.gradient.x,
                 y: effects.gradient.y,
                 width: effects.gradient.width,
@@ -223,21 +213,21 @@ export default async function RootLayout({
               }}
               dots={{
                 display: effects.dots.display,
-                opacity: effects.dots.opacity as opacity,
-                size: effects.dots.size as SpacingToken,
+                opacity: effects.dots.opacity,
+                size: effects.dots.size,
                 color: effects.dots.color,
               }}
               grid={{
                 display: effects.grid.display,
-                opacity: effects.grid.opacity as opacity,
+                opacity: effects.grid.opacity,
                 color: effects.grid.color,
                 width: effects.grid.width,
                 height: effects.grid.height,
               }}
               lines={{
                 display: effects.lines.display,
-                opacity: effects.lines.opacity as opacity,
-                size: effects.lines.size as SpacingToken,
+                opacity: effects.lines.opacity,
+                size: effects.lines.size,
                 thickness: effects.lines.thickness,
                 angle: effects.lines.angle,
                 color: effects.lines.color,

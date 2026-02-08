@@ -5,17 +5,14 @@ import {
   Meta,
   Schema,
   AvatarGroup,
-  Button,
   Column,
-  Flex,
   Heading,
   Media,
   Text,
   SmartLink,
   Row,
-  Avatar,
   Line,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { baseURL, about, home, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash, CustomMDX } from "@/components";
@@ -160,7 +157,7 @@ export default async function Project({
           }),
         }}
       />
-      <Column maxWidth="s" gap="16" horizontal="center" align="center">
+      <Column maxWidth="s" gap="16" horizontal="center" vertical="center" className="text-center">
         <SmartLink href="/work">
           <Text variant="label-strong-m">Projects</Text>
         </SmartLink>

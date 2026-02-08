@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Column, Row, Text } from "@once-ui-system/core";
+import { Button, Column, Row, Text } from "@/components/ui";
+import type { IconName } from "@/resources/icons";
 import classNames from "classnames";
 
 export interface CTAProps {
@@ -15,11 +16,11 @@ export interface CTAProps {
   /** Click handler – used when href is not set */
   onClick?: () => void;
   /** Optional button variant (e.g. "primary" | "secondary") */
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "ghost";
   /** Optional button size */
   size?: "s" | "m" | "l";
   /** Optional icon name for the button (e.g. "arrowRight", "arrowUpRightFromSquare") */
-  buttonIcon?: string;
+  buttonIcon?: IconName;
   /** Optional alignment: "center" | "start" (left) */
   align?: "center" | "start";
   /** Optional className for the wrapper */
@@ -44,12 +45,15 @@ export function CTA({
       gap="m"
       padding="l"
       radius="l"
-      horizontal={align}
-      align={align === "center" ? "center" : "start"}
+      horizontal={align === "center" ? "center" : "start"}
+      vertical={align === "center" ? "center" : "start"}
       data-border="rounded"
-      className={classNames("brand-background-alpha-weak brand-border-alpha-medium border-1 border-solid", className)}
+      className={classNames(
+        "border border-[var(--brand-alpha-medium)] bg-[var(--brand-alpha-weak)]",
+        className,
+      )}
     >
-      <Column gap="8" horizontal={align} align={align} maxWidth="m">
+      <Column gap="8" horizontal={align === "center" ? "center" : "start"} maxWidth="m">
         <Text as="h2" variant="heading-strong-m" onBackground="neutral-strong">
           {title}
         </Text>

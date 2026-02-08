@@ -1,6 +1,6 @@
 "use client";
 
-import { Row, Text, Button, useToast } from "@once-ui-system/core";
+import { Row, Text, Button, useToast } from "@/components/ui";
 import { socialSharing } from "@/resources";
 
 interface ShareSectionProps {
@@ -74,7 +74,7 @@ const socialPlatforms: Record<string, SocialPlatform> = {
 };
 
 export function ShareSection({ title, url }: ShareSectionProps) {
-  const { addToast } = useToast();
+  const { toast } = useToast();
   // Don't render if sharing is disabled
   if (!socialSharing.display) {
     return null;
@@ -83,16 +83,10 @@ export function ShareSection({ title, url }: ShareSectionProps) {
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(url);
-      addToast({
-        variant: "success",
-        message: "Link copied to clipboard",
-      });
+      toast("Link copied to clipboard");
     } catch (err) {
       console.error("Failed to copy: ", err);
-      addToast({
-        variant: "danger",
-        message: "Failed to copy link",
-      });
+      toast("Failed to copy link");
     }
   };
 
@@ -103,7 +97,7 @@ export function ShareSection({ title, url }: ShareSectionProps) {
     .filter((platform) => platform.name); // Filter out platforms that don't exist in our definitions
 
   return (
-    <Row fillWidth center gap="16" marginTop="32" marginBottom="16">
+    <Row fillWidth horizontal="center" vertical="center" gap="16" marginTop="32" marginBottom="16">
       <Text variant="label-default-m" onBackground="neutral-weak">
         Share this post:
       </Text>

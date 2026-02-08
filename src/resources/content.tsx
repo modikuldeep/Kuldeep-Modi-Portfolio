@@ -1,5 +1,5 @@
 import type { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
+import { Line, Row, Text } from "@/components/ui";
 import { Fragment } from "react/jsx-runtime";
 
 const person: Person = {
