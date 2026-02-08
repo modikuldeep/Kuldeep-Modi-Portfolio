@@ -51,13 +51,17 @@ export function Button({
   if (href) {
     const isExternal = href.startsWith("http") || href.startsWith("mailto:");
     if (isExternal) {
+      const { rel, target, ...rest } = props;
+      const mergedRel = ["noopener", "noreferrer", rel]
+        .filter(Boolean)
+        .join(" ");
       return (
         <a
           href={href}
           className={classes}
-          target="_blank"
-          rel="noopener noreferrer"
-          {...props}
+          {...rest}
+          target={target ?? "_blank"}
+          rel={mergedRel}
         >
           {prefixIcon && <Icon name={prefixIcon} className="text-current" />}
           {children}
