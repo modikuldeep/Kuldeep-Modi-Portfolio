@@ -1,6 +1,3 @@
-import "@/resources/custom.css";
-import "@once-ui-system/core/css/styles.css";
-import "@once-ui-system/core/css/tokens.css";
 import { Footer, Header, LinkTracker, Providers, RouteGuard } from "@/components";
 import {
   baseURL,
@@ -14,6 +11,7 @@ import {
   social,
   style,
 } from "@/resources";
+import "@/resources/custom.css";
 import {
   Background,
   Column,
@@ -23,6 +21,8 @@ import {
   type SpacingToken,
   type opacity,
 } from "@once-ui-system/core";
+import "@once-ui-system/core/css/styles.css";
+import "@once-ui-system/core/css/tokens.css";
 import classNames from "classnames";
 
 export async function generateMetadata() {
@@ -129,7 +129,7 @@ export default async function RootLayout({
             }),
           }}
         />
-        {/* <meta
+        <meta
           name="google-site-verification"
           content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw"
         />
@@ -137,7 +137,7 @@ export default async function RootLayout({
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        /> */}
+        />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
