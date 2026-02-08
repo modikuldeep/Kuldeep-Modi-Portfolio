@@ -11,7 +11,7 @@ import {
   Meta,
   Schema,
   Row,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { baseURL, about, home, person, social } from "@/resources";
 import { generateBreadcrumbs } from "@/utils/utils";
 import TableOfContents from "@/components/about/TableOfContents";
@@ -119,25 +119,22 @@ export default function About() {
       />
       {about.tableOfContent.display && (
         <Column
-          left="0"
+          className="left-0 s:hidden"
           style={{ top: "50%", transform: "translateY(-50%)" }}
           position="fixed"
           paddingLeft="24"
           gap="32"
-          s={{ hide: true }}
         >
           <TableOfContents structure={structure} about={about} />
         </Column>
       )}
-      <Row fillWidth s={{ direction: "column"}} horizontal="center">
+      <Row fillWidth horizontal="center" className="s:flex-col">
         {about.avatar.display && (
           <Column
-            className={styles.avatar}
             top="64"
             fitHeight
             position="sticky"
-            s={{ position: "relative", style: { top: "auto" } }}
-            xs={{ style: { top: "auto" } }}
+            className={`${styles.avatar} s:static s:top-auto`}
             minWidth="160"
             paddingX="l"
             paddingBottom="xl"
@@ -147,7 +144,7 @@ export default function About() {
           >
             <Avatar src={person.avatar} size="xl" />
             <Row gap="8" vertical="center">
-              <Icon onBackground="accent-weak" name="globe" />
+              <Icon className="text-[var(--accent-on-background-weak)]" name="globe" />
               {person.location}
             </Row>
             {person.languages && person.languages.length > 0 && (
@@ -171,7 +168,7 @@ export default function About() {
           >
             {about.calendar.display && (
               <Row
-                fitWidth
+                className={`w-fit ${styles.blockAlign}`}
                 border="brand-alpha-medium"
                 background="brand-alpha-weak"
                 radius="full"
@@ -179,18 +176,17 @@ export default function About() {
                 gap="8"
                 marginBottom="m"
                 vertical="center"
-                className={styles.blockAlign}
                 style={{
                   backdropFilter: "blur(var(--static-space-1))",
                 }}
               >
-                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
+                <Icon className="pl-[var(--static-space-12)] text-[var(--brand-on-background-weak)]" name="calendar" />
                 <Row paddingX="8">Schedule a call</Row>
                 <IconButton
                   href={about.calendar.link}
                   data-border="rounded"
                   variant="secondary"
-                  icon="chevronRight"
+                  prefixIcon="arrowRight"
                 />
               </Row>
             )}
@@ -206,13 +202,12 @@ export default function About() {
             </Text>
             {social.length > 0 && (
               <Row
-                className={styles.blockAlign}
+                className={`${styles.blockAlign} w-fit`}
                 paddingTop="20"
                 paddingBottom="8"
                 gap="8"
                 wrap
                 horizontal="center"
-                fitWidth
                 data-border="rounded"
               >
                 {social
@@ -226,18 +221,18 @@ export default function About() {
                             key={item.name}
                             href={item.link}
                             prefixIcon={item.icon}
-                            label={item.name}
                             size="s"
-                            weight="default"
                             variant="secondary"
-                          />
+                          >
+                            {item.name}
+                          </Button>
                         </Row>
                         <Row hide s={{ hide: false }}>
                           <IconButton
                             size="l"
                             key={`${item.name}-icon`}
                             href={item.link}
-                            icon={item.icon}
+                            prefixIcon={item.icon}
                             variant="secondary"
                           />
                         </Row>
@@ -291,7 +286,7 @@ export default function About() {
                         {experience.images.map((image, index) => (
                           <Row
                             key={`${image.src}-${index}`}
-                            border="neutral-medium"
+                            border="neutral-border-medium"
                             radius="m"
                             minWidth={image.width}
                             height={image.height}
@@ -366,7 +361,7 @@ export default function About() {
                         {skill.images.map((image, index) => (
                           <Row
                             key={`${image.src}-${index}`}
-                            border="neutral-medium"
+                            border="neutral-border-medium"
                             radius="m"
                             minWidth={image.width}
                             height={image.height}

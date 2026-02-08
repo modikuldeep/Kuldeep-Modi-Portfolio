@@ -9,20 +9,7 @@ const Posts = dynamic(() => import("@/components/blog/Posts").then((mod) => ({ d
 const Projects = dynamic(() => import("@/components/work/Projects").then((mod) => ({ default: mod.Projects })), {
   loading: () => null,
 });
-import {
-  Avatar,
-  Badge,
-  Button,
-  Column,
-  Heading,
-  IconButton,
-  Line,
-  Meta,
-  RevealFx,
-  Row,
-  Schema,
-  Text,
-} from "@once-ui-system/core";
+import { Column, Meta, Schema } from "@/components/ui";
 import { HomeClient } from "./HomeClient";
 
 export async function generateMetadata() {

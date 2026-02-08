@@ -1,5 +1,5 @@
 import { getPosts } from "@/utils/utils";
-import { Grid } from "@once-ui-system/core";
+import { Grid } from "@/components/ui";
 import Post from "./Post";
 
 interface PostsProps {
@@ -35,7 +35,7 @@ export async function Posts({
   return (
     <>
       {displayedBlogs.length > 0 && (
-        <Grid columns={columns} s={{ columns: 1 }} fillWidth marginBottom="40" gap="16">
+        <Grid columns={Number(columns)} fillWidth marginBottom="40" gap="16" className="s:grid-cols-1">
           {displayedBlogs.map((post) => (
             <Post key={post.slug} post={post} thumbnail={thumbnail} direction={direction} />
           ))}

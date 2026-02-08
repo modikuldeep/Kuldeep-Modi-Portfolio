@@ -1,17 +1,30 @@
-import type {
-  BorderStyle,
-  ChartMode,
-  ChartVariant,
-  NeutralColor,
-  ScalingSize,
-  Schemes,
-  SolidStyle,
-  SolidType,
-  SurfaceStyle,
-  Theme,
-  TransitionStyle,
-} from "@once-ui-system/core";
 import type { NextFontWithVariable } from "next/dist/compiled/@next/font";
+
+export type Theme = "light" | "dark" | "system";
+export type NeutralColor = "sand" | "gray" | "slate" | "custom";
+export type Schemes =
+  | "blue"
+  | "indigo"
+  | "violet"
+  | "magenta"
+  | "pink"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "moss"
+  | "green"
+  | "emerald"
+  | "aqua"
+  | "cyan"
+  | "custom";
+export type SolidType = "color" | "contrast" | "inverse";
+export type SolidStyle = "flat" | "plastic";
+export type BorderStyle = "rounded" | "playful" | "conservative";
+export type SurfaceStyle = "filled" | "translucent";
+export type TransitionStyle = "all" | "micro" | "macro";
+export type ScalingSize = "90" | "95" | "100" | "105" | "110";
+export type ChartVariant = "flat" | "gradient" | "outline";
+export type ChartMode = "categorical" | "divergent" | "sequential";
 
 /**
  * Display configuration for UI elements.

@@ -1,6 +1,6 @@
 "use client";
 
-import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
+import { Row, IconButton, SmartLink, Text } from "@/components/ui";
 import { person, social } from "@/resources";
 import { trackSocialClick } from "@/utils/analytics";
 import styles from "./Footer.module.scss";
@@ -13,12 +13,12 @@ export const Footer = () => {
   };
 
   return (
-    <Row 
-      as="footer" 
-      fillWidth 
-      padding="8" 
-      horizontal="center" 
-      s={{ direction: "column" }}
+    <Row
+      as="footer"
+      fillWidth
+      padding="8"
+      horizontal="center"
+      className="s:flex-col"
       style={{ 
         minHeight: "159px",
         // Prevent layout shifts by reserving space for all content
@@ -33,19 +33,14 @@ export const Footer = () => {
         gap="16"
         horizontal="between"
         vertical="center"
-        s={{
-          direction: "column",
-          horizontal: "center",
-          align: "center",
-        }}
         style={{
           // Ensure content doesn't shift when loading
-          minHeight: "103px"
+          minHeight: "103px",
         }}
       >
         <Text variant="body-default-s" onBackground="neutral-strong">
           <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">{person.name}</Text>
+          <Text className="px-[var(--static-space-4)]">{person.name}</Text>
           <Text onBackground="neutral-weak">
             {/* Usage of this template requires attribution. Please don't remove the link to Once UI unless you have a Pro license. */}
             / Build your portfolio with{" "}
@@ -59,8 +54,8 @@ export const Footer = () => {
                 <IconButton
                   key={item.name}
                   href={item.link}
-                  icon={item.icon}
-                  tooltip={item.name}
+                  prefixIcon={item.icon}
+                  aria-label={item.name}
                   size="s"
                   variant="ghost"
                   onClick={() => handleSocialClick(item.name)}

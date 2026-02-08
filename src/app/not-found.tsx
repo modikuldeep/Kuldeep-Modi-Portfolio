@@ -1,8 +1,8 @@
-import { Column, Heading, Text } from "@once-ui-system/core";
+import { Column, Heading, Text } from "@/components/ui";
 
 export default function NotFound() {
   return (
-    <Column as="section" fill center paddingBottom="160">
+    <Column as="section" fillWidth horizontal="center" vertical="center" className="text-center" paddingBottom="160">
       <Text marginBottom="s" variant="display-strong-xl">
         404
       </Text>

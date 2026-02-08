@@ -8,8 +8,8 @@ import {
   Text,
   InlineCode,
   CodeBlock,
-  TextProps,
-  MediaProps,
+  type TextProps,
+  type MediaProps,
   Accordion,
   AccordionGroup,
   Table,
@@ -25,7 +25,7 @@ import {
   List,
   ListItem,
   Line,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 import { CTA } from "@/components/CTA";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {

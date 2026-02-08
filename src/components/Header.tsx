@@ -1,7 +1,7 @@
 "use client";
 
 import { about, blog, display, gallery, person, routes, work } from "@/resources";
-import { Column, Fade, Flex, Line, Logo, Media, Row, ToggleButton } from "@once-ui-system/core";
+import { Column, Fade, Flex, Line, Logo, Row, ToggleButton } from "@/components/ui";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.scss";
@@ -58,7 +58,7 @@ export const Header = () => {
       />
       <Row
         fitHeight
-        className={styles.position}
+        className={`${styles.position} s:fixed`}
         position="sticky"
         as="header"
         zIndex={9}
@@ -66,9 +66,6 @@ export const Header = () => {
         padding="8"
         horizontal="center"
         data-border="rounded"
-        s={{
-          position: "fixed",
-        }}
       >
         <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
           <Logo wordmark={person.logo} size="xl" />

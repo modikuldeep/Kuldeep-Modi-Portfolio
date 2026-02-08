@@ -1,4 +1,4 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Column, Heading, Meta, Schema } from "@/components/ui";
 import { baseURL, about, home, person, work } from "@/resources";
 import { generateBreadcrumbs } from "@/utils/utils";
 import { Projects } from "@/components/work/Projects";

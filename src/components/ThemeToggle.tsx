@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Row, ToggleButton, useTheme } from "@once-ui-system/core";
+import { ToggleButton, useTheme } from "@/components/ui";
 import { trackThemeToggle } from "@/utils/analytics";
 
 export const ThemeToggle: React.FC = () => {

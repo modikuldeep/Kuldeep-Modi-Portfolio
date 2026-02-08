@@ -1,7 +1,7 @@
 "use client";
 
 import React, { JSX } from "react";
-import { Heading, Flex, IconButton, useToast } from "@once-ui-system/core";
+import { Heading, Flex, IconButton, useToast } from "@/components/ui";
 
 import styles from "@/components/HeadingLink.module.scss";
 
@@ -13,22 +13,16 @@ interface HeadingLinkProps {
 }
 
 export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, style }) => {
-  const { addToast } = useToast();
+  const { toast } = useToast();
 
   const copyURL = (id: string): void => {
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
     navigator.clipboard.writeText(url).then(
       () => {
-        addToast({
-          variant: "success",
-          message: "Link copied to clipboard.",
-        });
+        toast("Link copied to clipboard.");
       },
       () => {
-        addToast({
-          variant: "danger",
-          message: "Failed to copy link.",
-        });
+        toast("Failed to copy link.");
       },
     );
   };
@@ -56,14 +50,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, level, children, s
       <Heading className={styles.text} id={id} variant={variant} as={asTag}>
         {children}
       </Heading>
-      <IconButton
-        className={styles.visibility}
-        size="s"
-        icon="openLink"
-        variant="ghost"
-        tooltip="Copy"
-        tooltipPosition="right"
-      />
+      <IconButton className={styles.visibility} size="s" prefixIcon="openLink" variant="ghost" />
     </Flex>
   );
 };

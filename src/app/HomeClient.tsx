@@ -13,7 +13,7 @@ import {
   RevealFx,
   Row,
   Text,
-} from "@once-ui-system/core";
+} from "@/components/ui";
 
 interface HomeClientProps {
   projectsComponent: React.ReactNode;
@@ -32,7 +32,7 @@ export function HomeClient({ projectsComponent, postsComponent }: HomeClientProp
   return (
     <>
       <Column fillWidth horizontal="center" gap="m">
-        <Column maxWidth="s" horizontal="center" align="center">
+        <Column maxWidth="s" horizontal="center" vertical="center" className="text-center">
           {home.featured.display && (
             <RevealFx
               fillWidth
@@ -42,13 +42,8 @@ export function HomeClient({ projectsComponent, postsComponent }: HomeClientProp
               paddingLeft="12"
             >
               <Badge
-                background="brand-alpha-weak"
-                paddingX="12"
-                paddingY="4"
-                onBackground="neutral-strong"
-                textVariant="label-default-s"
-                arrow={false}
                 href={home.featured.href}
+                className="bg-[var(--brand-alpha-weak)] px-[var(--static-space-12)] py-[var(--static-space-4)] text-[var(--neutral-on-background-strong)]"
               >
                 <Row paddingY="2">{home.featured.title}</Row>
               </Badge>
@@ -72,8 +67,8 @@ export function HomeClient({ projectsComponent, postsComponent }: HomeClientProp
                     <IconButton
                       key={item.name}
                       href={item.link}
-                      icon={item.icon}
-                      tooltip={item.name}
+                      prefixIcon={item.icon}
+                      aria-label={item.name}
                       size="s"
                       variant="ghost"
                       onClick={() => handleSocialClick(item.name)}
@@ -89,18 +84,14 @@ export function HomeClient({ projectsComponent, postsComponent }: HomeClientProp
               href={about.path}
               variant="secondary"
               size="m"
-              weight="default"
-              arrowIcon
+              suffixIcon="arrowRight"
               onClick={handleAboutButtonClick}
             >
               <Row gap="8" vertical="center" paddingRight="4">
                 {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                  />
+                  <div className="-ml-3 mr-2">
+                    <Avatar src={person.avatar} size="m" />
+                  </div>
                 )}
                 {about.title}
               </Row>
