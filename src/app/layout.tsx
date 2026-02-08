@@ -37,6 +37,11 @@ export async function generateMetadata() {
   return {
     ...metadata,
     keywords: home.keywords,
+    applicationName: `${person.name}'s Portfolio`,
+    openGraph: {
+      ...metadata.openGraph,
+      siteName: `${person.name}'s Portfolio`,
+    },
   };
 }
 
@@ -124,7 +129,7 @@ export default async function RootLayout({
             }),
           }}
         />
-        <meta
+        {/* <meta
           name="google-site-verification"
           content="1muOO1GC8YE_WMLoEXKckZ0rjtim9-bqvZ39QS5Gfqw"
         />
@@ -132,7 +137,7 @@ export default async function RootLayout({
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id="69727e07-4cbc-4962-bb38-45096e3af218"
-        />
+        /> */}
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
