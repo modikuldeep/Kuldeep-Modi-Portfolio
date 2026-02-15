@@ -1,7 +1,7 @@
 "use client";
 
 import { about, blog, display, gallery, person, routes, work } from "@/resources";
-import { Column, Fade, Flex, Line, Logo, Media, Row, ToggleButton } from "@once-ui-system/core";
+import { Column, Fade, Flex, Line, Logo, Row, ToggleButton } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import styles from "./Header.module.scss";
@@ -71,7 +71,7 @@ export const Header = () => {
         }}
       >
         <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          <Logo wordmark={person.logo} size="xl" />
+          <Logo wordmark={person.logo} size="xl" href="/" />
         </Row>
         <Row fillWidth horizontal="center">
           <Row

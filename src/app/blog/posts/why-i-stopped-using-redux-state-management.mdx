@@ -1,0 +1,204 @@
+---
+title: "Why I Stopped Using Redux for State Management"
+subtitle: "And why I switched to Zustand for most of my React projects"
+summary: "A practical take on moving from Redux to Zustand less boilerplate, simpler mental model, and when Redux might still be the right choice."
+publishedAt: "2025-02-15"
+image: "/images/blog/blog-3.webp"
+tag: "Frontend Development"
+---
+
+## The Backstory
+
+I used Redux for years. Actions, reducers, dispatch, selectors, and eventually Redux Toolkit I’ve shipped production apps with it and it worked. But over time, I started asking myself: *do I really need all of this for every project?* The answer, for most of what I build now, is no. That’s why I’ve largely switched to **Zustand** for client-side state, and I’m not looking back.
+
+This isn’t a “Redux is bad” post. It’s about fit: when Redux makes sense, when it doesn’t, and why Zustand has become my default for new React apps.
+
+## Why I Used Redux in the First Place
+
+Redux gave me:
+
+- **Predictable state updates** with a single store and clear data flow
+- **DevTools** for time-travel debugging and inspecting every action
+- **Middleware** for side effects (e.g. API calls, logging)
+- **Ecosystem** and patterns that many developers already know
+
+For large apps with lots of shared state and strict requirements (e.g. the multilanguage admin panel I wrote about earlier), Redux was a solid choice. The structure forced consistency and made onboarding easier once everyone learned the pattern.
+
+## What Started to Bother Me
+
+### 1. Boilerplate
+
+Even with Redux Toolkit, you still write slices, actions, and often selectors. For a simple “user preferences” or “UI panel open/closed” state, that’s a lot of files and ceremony.
+
+<CodeBlock
+  codes={[
+    {
+      code: `// Redux: store/slices/uiSlice.ts
+import { createSlice } from '@reduxjs/toolkit';
+
+const uiSlice = createSlice({
+  name: 'ui',
+  initialState: { sidebarOpen: true, theme: 'light' },
+  reducers: {
+    toggleSidebar: (state) => {
+      state.sidebarOpen = !state.sidebarOpen;
+    },
+    setTheme: (state, action) => {
+      state.theme = action.payload;
+    },
+  },
+});
+
+export const { toggleSidebar, setTheme } = uiSlice.actions;
+export default uiSlice.reducer;`,
+      language: "typescript",
+      label: "Redux slice for simple UI state"
+    }
+  ]}
+/>
+
+Then you wire it into the store, and in components you use `useSelector` and `useDispatch`. For a handful of flags, it still feels heavy.
+
+### 2. Mental Overhead
+
+New devs (or me, after a break from a codebase) have to think: *Where’s the action? Where’s the reducer? Which slice does this live in?* That’s fine when the problem is complex; for “toggle sidebar” it’s more than I want to maintain.
+
+### 3. Provider and Setup
+
+You need a `Provider` around the app and a configured store. Not a dealbreaker, but it’s one more layer. In Next.js or when you’re composing many providers (theme, i18n, etc.), the tree gets noisy.
+
+### 4. Not Everything Needs a Global Store
+
+A lot of state is local (form fields, dropdown open state) or can be server state (React Query, SWR). I was putting things in Redux “just in case” we’d need them globally later. That led to a bloated store and unnecessary re-renders when we subscribed to big slices.
+
+## Why I Chose Zustand
+
+[Zustand](https://github.com/pmndrs/zustand) is a small state library from the same ecosystem as React Three Fiber (Poimandres). It gives you a store with minimal API and no provider.
+
+### What I like about it
+
+- **Minimal boilerplate**: One file, one function, and you have a store.
+- **No provider**: You create a store and use it. No wrapping the app.
+- **Simple API**: `getState()`, `setState()`, and a `useStore` hook. Easy to read and teach.
+- **TypeScript-friendly**: Typing the store is straightforward.
+- **Small bundle**: ~1–2 kB gzipped, so it doesn’t add much cost.
+- **Flexible**: Use it for global state, or scope it to a part of the tree.
+
+### The same UI state in Zustand
+
+<CodeBlock
+  codes={[
+    {
+      code: `// stores/useUIStore.ts
+import { create } from 'zustand';
+
+interface UIState {
+  sidebarOpen: boolean;
+  theme: 'light' | 'dark';
+  toggleSidebar: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
+}
+
+export const useUIStore = create<UIState>((set) => ({
+  sidebarOpen: true,
+  theme: 'light',
+  toggleSidebar: () => set((state) => ({ sidebarOpen: !state.sidebarOpen })),
+  setTheme: (theme) => set({ theme }),
+}));`,
+      language: "typescript",
+      label: "Zustand store for UI state"
+    }
+  ]}
+/>
+
+In a component:
+
+<CodeBlock
+  codes={[
+    {
+      code: `// Component usage
+function Sidebar() {
+  const { sidebarOpen, toggleSidebar } = useUIStore();
+
+  return (
+    <aside className={sidebarOpen ? 'open' : 'closed'}>
+      <button onClick={toggleSidebar}>Toggle</button>
+    </aside>
+  );
+}`,
+      language: "tsx",
+      label: "Using the store in a component"
+    }
+  ]}
+/>
+
+No actions, no dispatch, no slice just a hook and plain functions. For me, that’s the right level of abstraction for most client state.
+
+## Redux vs Zustand: Quick Comparison
+
+<Table
+  data={{
+    headers: [
+      { key: "aspect", content: "Aspect" },
+      { key: "redux", content: "Redux (with RTK)" },
+      { key: "zustand", content: "Zustand" },
+    ],
+    rows: [
+      ["Boilerplate", "Slices, actions, store config", "Single store function"],
+      ["Provider", "Required", "Not needed"],
+      ["DevTools", "Excellent (time-travel)", "Basic (state snapshots)"],
+      ["Learning curve", "Steeper", "Gentle"],
+      ["Bundle size", "Larger", "~1–2 kB"],
+      ["Middleware", "Rich ecosystem", "Minimal (you can add)"],
+      [
+        "Best for",
+        "Large teams, strict patterns, complex flows",
+        "Small–medium apps, fast iteration",
+      ],
+    ],
+  }}
+/>
+
+## When I Still Consider Redux
+
+I haven’t abandoned Redux entirely. I’d still lean toward it when:
+
+- **The team is large and already standardized on Redux**: consistency matters more than my preference.
+- **We need advanced DevTools**: time-travel and action replay can be worth the cost.
+- **We have complex middleware needs**: sagas, strict logging, or very specific side-effect pipelines.
+- **The product is an existing Redux codebase**: rewriting for Zustand isn’t always justified.
+
+So: “stopped using” for *new* projects and smaller apps; “still use when it fits” for the rest.
+
+## Migrating from Redux to Zustand
+
+If you’re thinking of trying Zustand in a Redux app:
+
+1. **Start at the edges**: Pick one slice (e.g. UI or feature flags) and replace it with a Zustand store. Keep Redux for the rest.
+2. **Match the shape**: Design the Zustand store so components can switch with minimal changes (same field names, similar “selectors” via the hook).
+3. **Split by domain**: Use multiple small stores (e.g. `useUIStore`, `useAuthStore`) instead of one giant store. It keeps things readable and avoids unnecessary re-renders.
+4. **Use selectors**: Zustand’s `useStore(selector)` only re-renders when the selected slice changes, similar to `useSelector`. Use it for performance.
+
+<CodeBlock
+  codes={[
+    {
+      code: `// Selective subscription only re-render when theme changes
+const theme = useUIStore((state) => state.theme);`,
+      language: "typescript",
+      label: "Selector pattern to avoid unnecessary re-renders"
+    }
+  ]}
+/>
+
+## Conclusion
+
+I stopped defaulting to Redux because, for most of my projects, the benefits no longer outweighed the cost. Zustand gives me enough structure without the boilerplate, and I can move faster without sacrificing clarity. For new React apps, it’s my go-to for client state; for bigger or Redux-heavy codebases, I still choose Redux when the context demands it.
+
+If you’re on the fence, try Zustand in a small feature or a side project. You might find, like I did, that a lot of your state doesn’t need Redux’s power and that’s okay.
+
+<CTA
+  title="Thinking about state management for your app?"
+  description="I can help you choose and implement the right approach."
+  buttonText="Get in Touch"
+  href="mailto:kuldeepmodi95@gmail.com"
+/>

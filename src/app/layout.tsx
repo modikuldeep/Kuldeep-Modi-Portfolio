@@ -12,6 +12,7 @@ import {
   style,
 } from "@/resources";
 import "@/resources/custom.css";
+import "@/styles/table-overrides.scss";
 import {
   Background,
   Column,

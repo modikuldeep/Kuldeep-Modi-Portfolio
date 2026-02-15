@@ -1,12 +1,6 @@
-import dynamic from "next/dynamic";
 import { CustomMDX, ScrollToHash } from "@/components";
 import { ShareSection } from "@/components/blog/ShareSection";
 import { about, baseURL, blog, home, person } from "@/resources";
-
-// Code splitting: Load Posts component dynamically
-const Posts = dynamic(() => import("@/components/blog/Posts").then((mod) => ({ default: mod.Posts })), {
-  loading: () => null,
-});
 import { formatDate } from "@/utils/formatDate";
 import { generateBreadcrumbs, getPosts } from "@/utils/utils";
 import {
@@ -23,7 +17,13 @@ import {
   Text,
 } from "@once-ui-system/core";
 import type { Metadata } from "next";
+import dynamic from "next/dynamic";
 import { notFound } from "next/navigation";
+
+// Code splitting: Load Posts component dynamically
+const Posts = dynamic(() => import("@/components/blog/Posts").then((mod) => ({ default: mod.Posts })), {
+  loading: () => null,
+});
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
   const posts = getPosts(["src", "app", "blog", "posts"]);

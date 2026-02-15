@@ -1,0 +1,18 @@
+table.fill-width thead tr th {
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  border: 1px solid var(--neutral-alpha-weak);
+}
+
+table.fill-width td {
+  border: 1px solid var(--neutral-alpha-weak);
+}
+
+table.fill-width tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Row hover */
+table.fill-width tbody tr:hover {
+  background-color: var(--neutral-alpha-medium);
+}
