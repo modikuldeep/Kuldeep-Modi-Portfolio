@@ -1,0 +1,93 @@
+---
+title: "How I Use AI Coding Assistants Without Trusting Them Blindly"
+subtitle: "Practical habits for getting value from Copilot, Cursor, and Claude without letting 'almost right' code ship"
+summary: "A candid take on when I lean on AI for coding, when I don't, and how I review every suggestion so I stay in control."
+publishedAt: "2025-02-22"
+image: "/images/blog/blog-4.webp"
+tag: "AI & Development"
+---
+
+## The Reality Check
+
+I use AI coding assistants almost every day. Autocomplete, refactors, test drafts, and “explain this block” have become part of my flow. But I don’t trust the output. Not because the tools are bad they’re genuinely useful but because “almost right” is still wrong when it ends up in production. So I’ve built a few habits that let me get the speed without the regret. Here’s what actually works for me.
+
+## Where I Lean on AI
+
+### Boilerplate and repetition
+
+Things like API route skeletons, DTOs, repetitive component props, and similar “fill in the pattern” code are where I accept suggestions most freely. The structure is predictable, and mistakes are easy to spot. I still skim the result, but I don’t treat it like a black box.
+
+### Explaining and navigating code
+
+When I open a file I didn’t write or return to old code, I use “explain this” or “what does this function do?” to get oriented. The model often gets the gist right; I use it as a starting point and then confirm by reading the code myself. It saves time without replacing my own understanding.
+
+### Drafting tests and docs
+
+I ask for unit tests for a function or a short JSDoc/README snippet. I treat the output as a first draft: I adjust assertions, fix edge cases, and align the wording with how we actually use the API. It’s faster than writing from scratch but still under my control.
+
+### Small refactors and renames
+
+Rename a variable, extract a helper, or switch from a callback to async/await I’ll take a suggestion and then run the linter and tests. If the change is local and the test suite is decent, the risk is low and the gain is real.
+
+## Where I Don’t Rely on AI
+
+### Architecture and design
+
+I don’t ask AI to design the structure of a module or decide where to put state. Those choices depend on the rest of the codebase and product requirements. I might use it to brainstorm options, but the final call is mine, and I don’t paste in large “design this for me” blocks without a thorough review.
+
+### Security- and data-sensitive logic
+
+Auth, permissions, validation of user input, and anything that touches money or PII (Personally Identifiable Information). I write and review that myself. I might use AI to suggest a regex or a validation pattern, but I verify the behavior and think through abuse cases before accepting.
+
+### Critical paths and business logic
+
+The core “what happens when the user does X” logic checkout, order sync, pricing rules. I write by hand or treat AI output as a rough sketch and then rewrite until I’m sure it’s correct. A subtle bug here is too expensive.
+
+## How I Review Every Suggestion
+
+I don’t accept a suggestion without at least one of these:
+
+- **Read it.** Not just the changed lines the surrounding context. Does it match the intent? Does it introduce a new dependency or side effect?
+- **Run the linter.** Most “almost right” code fails lint (wrong types, unused vars, style). Fixing those often surfaces logic issues too.
+- **Run the tests.** If there are tests for the area I changed, I run them. If not, I add a quick sanity check or run the app and click through the flow.
+- **Understand it.** If I can’t explain the suggestion to someone else, I don’t merge it. If I’m in a hurry, I leave a TODO and come back.
+
+That sounds strict, but in practice it’s a few seconds per suggestion. The cost of not doing it debugging a production issue or reverting a bad refactor is much higher.
+
+## Prompts That Actually Help
+
+I get better results when I’m specific:
+
+- **Bad:** “Fix this function.”
+- **Better:** “Refactor this function to use async/await and return a Result type; keep the same error messages.”
+
+- **Bad:** “Write tests.”
+- **Better:** “Add unit tests for this function; cover the success case and when the API returns 404 and 500.”
+
+- **Bad:** “Optimize this.”
+- **Better:** “This loop runs on a large array; suggest a more efficient approach and keep the same return shape.”
+
+Giving context (input shape, edge cases, or “don’t change the public API”) reduces the number of wrong or over-engineered answers and makes the suggestion easier to review.
+
+## When the Output Is “Almost Right”
+
+It happens all the time: the suggestion is 80% correct and 20% wrong. My default is to treat it as a draft:
+
+1. **Use the good parts.** Keep the structure or the lines that are clearly correct.
+2. **Fix the rest.** Correct the logic, types, or edge cases instead of re-prompting forever.
+3. **Note the failure mode.** If the same kind of mistake repeats (e.g. wrong null checks), I adjust how I prompt or what I ask the tool to do next time.
+
+I don’t expect the first suggestion to be perfect. I expect it to be a starting point that I can validate and correct quickly.
+
+## Bottom Line
+
+AI assistants make me faster at boilerplate, navigation, and first drafts. They don’t replace judgment. I use them for the tedious parts and for getting oriented; I keep architecture, security, and critical logic in my own hands and I review every suggestion before it becomes part of the codebase. That balance leaning on AI where it helps, not trusting it blindly is what works for me.
+
+If you’ve found a rhythm that works for you (or one that backfired), I’d be curious to hear it.
+
+<CTA
+  title="Want to build something with a clear, reviewable codebase?"
+  description="I use AI to move faster but keep quality and security in focus."
+  buttonText="Get in Touch"
+  href="mailto:kuldeepmodi95@gmail.com"
+/>

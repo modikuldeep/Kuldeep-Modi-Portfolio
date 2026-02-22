@@ -39,9 +39,21 @@ export async function generateMetadata() {
     ...metadata,
     keywords: home.keywords,
     applicationName: `${person.name}'s Portfolio`,
+    authors: [{ name: person.name, url: baseURL }],
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
+    },
     openGraph: {
       ...metadata.openGraph,
       siteName: `${person.name}'s Portfolio`,
+    },
+    alternates: {
+      canonical: "./",
     },
   };
 }
@@ -65,6 +77,7 @@ export default async function RootLayout({
       )}
     >
       <head>
+        <meta name="author" content={person.name} />
         {/* Resource Hints for Performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
