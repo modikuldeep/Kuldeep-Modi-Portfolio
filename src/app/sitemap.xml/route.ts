@@ -1,23 +1,14 @@
 import { getPosts } from "@/utils/utils";
-import { baseURL, person, routes as routesConfig } from "@/resources";
+import { baseURL, routes as routesConfig } from "@/resources";
 import { NextResponse } from "next/server";
 
 /**
- * Custom sitemap that includes both lastmod and publication date (pd:publishdate).
- * Standard sitemap only has <lastmod>; we add an explicit publish date for blog/work entries.
+ * Sitemap using only standard tags (loc, lastmod) so Google Search Console accepts it.
+ * lastmod uses publishedAt for blog/work entries.
  */
 function toSitemapDate(date: string): string {
   const d = new Date(date);
-  return d.toISOString().split("T")[0]; // YYYY-MM-DD for sitemap compatibility
-}
-
-function escapeXml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&apos;");
+  return d.toISOString().split("T")[0]; // YYYY-MM-DD
 }
 
 export async function GET() {
@@ -39,32 +30,26 @@ export async function GET() {
   </url>`);
   }
 
-  // Blog posts: lastmod + publish date + author
+  // Blog posts
   for (const post of blogPosts) {
-    const pubDate = toSitemapDate(post.metadata.publishedAt);
     urlEntries.push(`
   <url>
     <loc>${baseURL}/blog/${post.slug}</loc>
-    <lastmod>${pubDate}</lastmod>
-    <pd:publishdate>${pubDate}</pd:publishdate>
-    <pd:author>${escapeXml(person.name)}</pd:author>
+    <lastmod>${toSitemapDate(post.metadata.publishedAt)}</lastmod>
   </url>`);
   }
 
-  // Work projects: lastmod + publish date + author
+  // Work projects
   for (const post of workPosts) {
-    const pubDate = toSitemapDate(post.metadata.publishedAt);
     urlEntries.push(`
   <url>
     <loc>${baseURL}/work/${post.slug}</loc>
-    <lastmod>${pubDate}</lastmod>
-    <pd:publishdate>${pubDate}</pd:publishdate>
-    <pd:author>${escapeXml(person.name)}</pd:author>
+    <lastmod>${toSitemapDate(post.metadata.publishedAt)}</lastmod>
   </url>`);
   }
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:pd="https://kuldeepmodi.vercel.app/ns/sitemap#">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urlEntries.join("")}
 </urlset>`;
 
